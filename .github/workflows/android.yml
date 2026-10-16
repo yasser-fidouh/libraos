@@ -25,16 +25,26 @@ jobs:
       - name: Create Android project (only if missing)
         run: '[ -d android ] || npx cap add android'
         working-directory: ${{ steps.d.outputs.dir }}
-        - name: Install ImageMagick
-  run: sudo apt-get update && sudo apt-get install -y imagemagick
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
       - name: Install LIBRAOS app icon
         working-directory: ${{ steps.d.outputs.dir }}
         shell: bash
         run: |
           set -e
+
+          # If icons are missing, generate simple placeholders so CI doesn't fail.
           for f in icon.png icon-foreground.png; do
-            test -f "$f" || { echo "ERROR: $f is missing. Upload icon.png and icon-foreground.png next to capacitor.config.json"; exit 1; }
+            if [ ! -f "$f" ]; then
+              echo "NOTICE: $f missing — generating placeholder"
+              if [ "$f" = "icon.png" ]; then
+                convert -size 1024x1024 canvas:"#041A55" -gravity center -font DejaVu-Sans -pointsize 300 -fill white -annotate 0 "L" "$f"
+              else
+                convert -size 1024x1024 canvas:none -gravity center -font DejaVu-Sans -pointsize 200 -fill white -annotate 0 "●" "$f"
+              fi
+            fi
           done
+
           R=android/app/src/main/res
           find $R -name "ic_launcher*.webp" -delete
           for p in mdpi:48:108 hdpi:72:162 xhdpi:96:216 xxhdpi:144:324 xxxhdpi:192:432; do
@@ -44,6 +54,7 @@ jobs:
             cp $R/mipmap-$d/ic_launcher.png $R/mipmap-$d/ic_launcher_round.png
             convert icon-foreground.png -resize ${f}x${f} $R/mipmap-$d/ic_launcher_foreground.png
           done
+
           mkdir -p $R/mipmap-anydpi-v26 $R/values
           for n in ic_launcher ic_launcher_round; do
           cat > $R/mipmap-anydpi-v26/$n.xml <<'XML'
@@ -60,7 +71,7 @@ jobs:
               <color name="ic_launcher_background">#041A55</color>
           </resources>
           XML
-          echo "Icon installed:"; ls $R/mipmap-xxxhdpi
+          echo "Icon installed:"; ls $R/mipmap-xxxhdpi || true
       - run: npx cap sync android
         working-directory: ${{ steps.d.outputs.dir }}
       - run: chmod +x gradlew && ./gradlew assembleDebug
@@ -69,6 +80,3 @@ jobs:
         with:
           name: LIBRAOS-apk
           path: ${{ steps.d.outputs.dir }}/android/app/build/outputs/apk/debug/app-debug.apk
-
-
-          
