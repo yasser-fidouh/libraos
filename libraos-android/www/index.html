@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><title>LIBRAOS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050d33;--panel:#0b1650;--panel2:#101e66;--line:#22338a;--tx:#eef3ff;--mut:#9fb0ee;--cy:#00c2ff;--bl:#0a5cff;--ok:#2ee59d;--bad:#ff5d73;--warn:#ffc14d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef3ff;--panel:#fff;--panel2:#e3ebff;--line:#c4d2fb;--tx:#0a1450;--mut:#4a5a9c}}
+:root[data-theme="light"]{--bg:#eef3ff;--panel:#fff;--panel2:#e3ebff;--line:#c4d2fb;--tx:#0a1450;--mut:#4a5a9c}
+:root[data-theme="dark"]{--bg:#050d33;--panel:#0b1650;--panel2:#101e66;--line:#22338a;--tx:#eef3ff;--mut:#9fb0ee}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 Outfit,Cairo,system-ui,sans-serif;min-height:100vh}
+[dir=rtl] body{font-family:Cairo,Outfit,system-ui,sans-serif}
+#app{display:flex;min-height:100vh}
+aside{width:250px;background:var(--panel);border-inline-end:1px solid var(--line);padding:18px 12px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh;overflow:auto;flex:none}
+.logo{display:flex;align-items:center;gap:10px;padding:0 8px 14px;font-weight:700;font-size:22px;letter-spacing:.5px}
+.logo small{display:block;font-size:10px;font-weight:400;color:var(--mut);letter-spacing:0}
+.logo b{color:var(--cy)}
+nav button{display:flex;gap:10px;align-items:center;width:100%;background:none;border:0;color:var(--mut);font:inherit;padding:10px 12px;border-radius:10px;cursor:pointer;text-align:start}
+nav button:hover{background:var(--panel2);color:var(--tx)}
+nav button.on{background:linear-gradient(90deg,var(--bl),var(--cy));color:#fff;font-weight:600}
+nav i{font-style:normal;width:20px;text-align:center}
+.by{margin-top:auto;font-size:12px;color:var(--mut);padding:8px}
+main{flex:1;padding:24px;min-width:0;max-width:1100px}
+header.top{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+header.top h1{margin:0;font-size:26px;flex:1}
+#burger{display:none}
+button.b,.b{background:linear-gradient(135deg,var(--bl),var(--cy));color:#fff;border:0;border-radius:10px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer}
+button.g{background:var(--panel2);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font:inherit;cursor:pointer}
+button.d{background:none;border:1px solid var(--bad);color:var(--bad);border-radius:8px;padding:5px 10px;font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer}
+.stat b{display:block;font-size:30px;color:var(--cy)}
+.stat span{color:var(--mut);font-size:13px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.card .grow{flex:1;min-width:160px}
+.card h3{margin:0;font-size:16px}
+.card p{margin:2px 0 0;color:var(--mut);font-size:13px;white-space:pre-wrap}
+.av{width:52px;height:52px;border-radius:50%;background:var(--panel2) center/cover;border:2px solid var(--cy);display:grid;place-items:center;font-weight:700;color:var(--cy);flex:none}
+.tag{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;background:var(--panel2);border:1px solid var(--line)}
+.ok{color:var(--ok)}.bad{color:var(--bad)}.warn{color:var(--warn)}
+.modal{position:fixed;inset:0;background:#000a;display:grid;place-items:center;z-index:50;padding:16px}
+.modal form{background:var(--panel);border:1px solid var(--cy);border-radius:16px;padding:20px;width:100%;max-width:460px;max-height:90vh;overflow:auto;display:flex;flex-direction:column;gap:10px}
+label{font-size:13px;color:var(--mut);display:flex;flex-direction:column;gap:4px}
+input,select,textarea{background:var(--bg);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:9px 11px;font:inherit;width:100%}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.seg button{background:var(--panel2);border:1px solid var(--line);color:var(--mut);padding:6px 11px;border-radius:8px;cursor:pointer;font:inherit;font-size:13px}
+.seg button.on.present{background:var(--ok);color:#022;border-color:var(--ok)}
+.seg button.on.absent{background:var(--bad);color:#fff;border-color:var(--bad)}
+.seg button.on.rest{background:var(--bl);color:#fff;border-color:var(--bl)}
+.seg button.on.late{background:var(--warn);color:#220;border-color:var(--warn)}
+.empty{color:var(--mut);padding:30px;text-align:center;border:1px dashed var(--line);border-radius:14px}
+h2{font-size:18px;margin:22px 0 10px}
+.rep{background:#fff;color:#111;border-radius:12px;padding:24px}
+.rep h2,.rep h3{color:#0a2a8a;margin:14px 0 6px}.rep table{width:100%;border-collapse:collapse;font-size:14px}.rep td,.rep th{border-bottom:1px solid #ddd;padding:5px;text-align:start}
+.toast{position:fixed;bottom:20px;inset-inline-start:50%;transform:translateX(-50%);background:var(--ok);color:#022;padding:8px 18px;border-radius:99px;font-weight:600;z-index:99}
+@media(max-width:820px){aside{position:fixed;inset:0 auto 0 0;z-index:40;transform:translateX(-105%);transition:transform .2s}[dir=rtl] aside{inset:0 0 0 auto;transform:translateX(105%)}aside.open{transform:none}#burger{display:inline-block}main{padding:16px}}
+@media print{aside,header.top,.noprint{display:none!important}body{background:#fff}main{padding:0;max-width:none}.rep{padding:0}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<div id="app"><aside id="sb"></aside><main id="mn"></main></div>
+<script>
+const $=s=>document.querySelector(s),uid=()=>Math.random().toString(36).slice(2,9),today=()=>new Date().toISOString().slice(0,10);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const T={fr:{dash:'Tableau de bord',emp:'Employés',tasks:'Tâches',att:'Pointages',needs:'Besoins des magasins',recl:'Réclamations',gaps:'Manques de caisse',rep:'Rapport de fin de journée',set:'Paramètres',add:'Ajouter',save:'Enregistrer',del:'Supprimer',cancel:'Annuler',nom:'Nom',prenom:'Prénom',tel:'N° téléphone',photo:'Photo de profil',fonction:'Fonction',info:'Infos supplémentaires',title:'Tâche',who:'Employé',when:'Date et heure',done:'Terminée',pending:'En cours',present:'Présent',absent:'Absent',rest:'Repos',late:'Retard',min:'min de retard',shop:'Magasin',item:'Besoin',qty:'Quantité',type:'Type',client:'Client',employee:'Employé',subject:'Objet',details:'Détails',status:'Statut',open:'Ouverte',closed:'Résolue',date:'Date',agent:'Agent',amount:'Montant (+/-)',note:'Note',print:'Imprimer',saveH:'Sauvegarder dans l\'historique',hist:'Historique',none:'Rien pour le moment. Appuyez sur Ajouter.',owner:'Nom du propriétaire',shops:'Magasins (séparés par une virgule)',lang:'Langue',backup:'Exporter la sauvegarde',restore:'Importer une sauvegarde',total:'Total',saved:'Enregistré',sure:'Supprimer cet élément ?',tagline:'Le système de gestion de votre papeterie & librairie',by:'Conçu par Yasser',preview:'Aperçu',view:'Voir',theme:'Thème',bought:'Acheté',noshop:'Ajoutez un magasin dans Paramètres',ps:'Présents',tp:'Tâches en cours',oc:'Réclamations ouvertes',gt:'Total des manques',npn:'Besoins en attente'},
+ar:{dash:'لوحة التحكم',emp:'الموظفون',tasks:'المهام',att:'الحضور',needs:'احتياجات المحلات',recl:'الشكاوى',gaps:'عجز الصندوق',rep:'تقرير نهاية اليوم',set:'الإعدادات',add:'إضافة',save:'حفظ',del:'حذف',cancel:'إلغاء',nom:'اللقب',prenom:'الاسم',tel:'رقم الهاتف',photo:'صورة الملف الشخصي',fonction:'الوظيفة',info:'معلومات إضافية',title:'المهمة',who:'الموظف',when:'التاريخ والوقت',done:'منجزة',pending:'قيد التنفيذ',present:'حاضر',absent:'غائب',rest:'راحة',late:'متأخر',min:'دقيقة تأخر',shop:'المحل',item:'الحاجة',qty:'الكمية',type:'النوع',client:'زبون',employee:'موظف',subject:'الموضوع',details:'التفاصيل',status:'الحالة',open:'مفتوحة',closed:'تمت المعالجة',date:'التاريخ',agent:'العون',amount:'المبلغ (+/-)',note:'ملاحظة',print:'طباعة',saveH:'حفظ في السجل',hist:'السجل',none:'لا يوجد شيء بعد. اضغط إضافة.',owner:'اسم المالك',shops:'المحلات (مفصولة بفاصلة)',lang:'اللغة',backup:'تصدير نسخة احتياطية',restore:'استيراد نسخة احتياطية',total:'المجموع',saved:'تم الحفظ',sure:'حذف هذا العنصر؟',tagline:'نظام تسيير مكتبتك وقرطاسيتك',by:'تصميم ياسر',preview:'معاينة',view:'عرض',theme:'المظهر',bought:'تم الشراء',noshop:'أضف محلاً من الإعدادات',ps:'الحاضرون',tp:'مهام قيد التنفيذ',oc:'شكاوى مفتوحة',gt:'مجموع العجز',npn:'احتياجات معلقة'}};
+let S;try{S=JSON.parse(localStorage.getItem('libraos'))}catch(e){}
+S=Object.assign({lang:'fr',owner:{name:'',phone:'',photo:'',shops:['Magasin 1'],extra:''},emp:[],tasks:[],att:{},needs:[],recl:[],gaps:[],reports:[]},S||{});
+const save=()=>{try{localStorage.setItem('libraos',JSON.stringify(S))}catch(e){alert('Storage full')}};
+const t=k=>T[S.lang][k]||k;
+let view='dash',repDate=today(),attDate=today();
+const NAV=[['dash','▦'],['emp','☺'],['tasks','✔'],['att','◷'],['needs','▤'],['recl','⚑'],['gaps','⚠'],['rep','▣'],['set','⚙']];
+const empName=id=>{const e=S.emp.find(x=>x.id==id);return e?e.prenom+' '+e.nom:'—'};
+const av=e=>`<div class="av" style="${e.photo?`background-image:url(${e.photo})`:''}">${e.photo?'':esc((e.prenom||e.nom||'?')[0])}</div>`;
+const fmtDT=v=>v?new Date(v).toLocaleString(S.lang==='ar'?'ar-DZ':'fr-FR',{dateStyle:'medium',timeStyle:'short'}):'';
+const M={
+emp:{f:[['nom','text'],['prenom','text'],['tel','tel'],['photo','photo'],['fonction','text'],['info','area']],row:e=>`${av(e)}<div class=grow><h3>${esc(e.prenom)} ${esc(e.nom)}</h3><p>${esc(e.fonction)} ${e.tel?'· <span dir=ltr>'+esc(e.tel)+'</span>':''}\n${esc(e.info)}</p></div>`},
+tasks:{f:[['title','text'],['who','emp'],['when','datetime-local'],['done','chk']],row:x=>`<div class=grow><h3>${esc(x.title)}</h3><p>${esc(empName(x.who))} · ${fmtDT(x.when)}</p></div><button class=g onclick="tog('tasks','${x.id}','done')">${x.done?'✔ '+t('done'):'○ '+t('pending')}</button>`},
+needs:{f:[['shop','shop'],['item','text'],['qty','text'],['done','chk']],row:x=>`<div class=grow><h3>${esc(x.item)} ${x.qty?'× '+esc(x.qty):''}</h3><p>${esc(x.shop)}</p></div><button class=g onclick="tog('needs','${x.id}','done')">${x.done?'✔ '+t('bought'):'○ '+t('pending')}</button>`},
+recl:{f:[['type',['client','employee']],['nom','text'],['subject','text'],['details','area'],['status',['open','closed']]],row:x=>`<div class=grow><h3>${esc(x.subject)} <span class=tag>${t(x.type)}</span> <span class="tag ${x.status=='closed'?'ok':'warn'}">${t(x.status)}</span></h3><p>${esc(x.nom)}\n${esc(x.details)}</p></div>`},
+gaps:{f:[['date','date'],['agent','emp'],['amount','number'],['note','text']],row:x=>`<div class=grow><h3>${esc(empName(x.agent))}</h3><p>${esc(x.date)} ${esc(x.note)}</p></div><b class="${x.amount<0?'bad':'ok'}" dir=ltr>${x.amount>0?'+':''}${x.amount} DA</b>`}};
+function tog(k,id,f){const x=S[k].find(a=>a.id==id);x[f]=!x[f];save();go(view)}
+function list(k){let a=S[k];if(k=='gaps')a=[...a].sort((x,y)=>y.date.localeCompare(x.date));
+let h=`<div class=row style="margin-bottom:14px"><button class=b onclick="form('${k}')">+ ${t('add')}</button></div>`;
+if(k=='gaps'){const s=a.reduce((n,x)=>n+ +x.amount,0);h+=`<div class=stat style="cursor:default;margin-bottom:14px"><span>${t('total')}</span><b class="${s<0?'bad':'ok'}" dir=ltr>${s} DA</b></div>`}
+h+=a.length?a.map(x=>`<div class=card>${M[k].row(x)}<button class=g onclick="form('${k}','${x.id}')">✎</button><button class=d onclick="rm('${k}','${x.id}')">✕</button></div>`).join(''):`<div class=empty>${t('none')}</div>`;return h}
+function rm(k,id){if(confirm(t('sure'))){S[k]=S[k].filter(x=>x.id!=id);save();go(view)}}
+let tmpPhoto='';
+function opts(f){if(Array.isArray(f))return f.map(v=>[v,t(v)]);if(f=='emp')return S.emp.map(e=>[e.id,e.prenom+' '+e.nom]);if(f=='shop')return S.owner.shops.map(s=>[s,s])}
+function form(k,id){const x=id?S[k].find(a=>a.id==id):{};tmpPhoto=x.photo||'';
+const def={date:today(),type:'client',status:'open'};
+const fs=M[k].f.map(([n,ty])=>{const v=x[n]??def[n]??'';let i;
+if(ty=='area')i=`<textarea name=${n} rows=3>${esc(v)}</textarea>`;
+else if(ty=='photo')i=`<input type=file accept="image/*" onchange="pic(this)">${tmpPhoto?`<div class=av style="background-image:url(${tmpPhoto})"></div>`:''}`;
+else if(ty=='chk')i=`<input type=checkbox name=${n} ${v?'checked':''} style="width:22px;height:22px">`;
+else if(typeof ty!='string'||ty=='emp'||ty=='shop'){const o=opts(ty);i=`<select name=${n}>${o.length?o.map(([a,b])=>`<option value="${esc(a)}" ${a==v?'selected':''}>${esc(b)}</option>`).join(''):'<option value="">'+t('noshop')+'</option>'}</select>`}
+else i=`<input name=${n} type=${ty} value="${esc(v)}" ${ty=='number'?'step=any':''} ${n=='tel'?'dir=ltr':''}>`;
+return `<label>${t(n)}${i}</label>`}).join('');
+const m=document.createElement('div');m.className='modal';
+m.innerHTML=`<form><h2 style="margin:0">${t(k)}</h2>${fs}<div class=row><button class=b>${t('save')}</button><button type=button class=g onclick="this.closest('.modal').remove()">${t('cancel')}</button></div></form>`;
+m.querySelector('form').onsubmit=e=>{e.preventDefault();const r=x.id?x:{id:uid()};
+M[k].f.forEach(([n,ty])=>{const el=e.target.elements[n];if(ty=='photo')r.photo=tmpPhoto;else if(ty=='chk')r[n]=el.checked;else r[n]=ty=='number'?+el.value||0:el.value});
+if(!x.id)S[k].push(r);save();m.remove();go(view);toast(t('saved'))};
+document.body.appendChild(m)}
+function pic(inp,cb){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),s=Math.min(1,200/Math.max(im.width,im.height));c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);tmpPhoto=c.toDataURL('image/jpeg',.8);if(cb)cb(tmpPhoto)};im.src=r.result};r.readAsDataURL(f)}
+function toast(m){const d=document.createElement('div');d.className='toast';d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),1600)}
+const ST=['present','absent','rest','late'];
+function setAtt(d,id,s){(S.att[d]??={})[id]??={};S.att[d][id].s=s;if(s!='late')S.att[d][id].m=0;save();go('att')}
+function setMin(d,id,v){S.att[d][id].m=+v||0;save()}
+function attView(){const d=attDate;
+let h=`<div class=row style="margin-bottom:14px"><label>${t('date')}<input type=date value="${d}" onchange="attDate=this.value;go('att')"></label></div>`;
+h+=S.emp.length?S.emp.map(e=>{const a=(S.att[d]||{})[e.id]||{};return `<div class=card>${av(e)}<div class=grow><h3>${esc(e.prenom)} ${esc(e.nom)}</h3><p>${esc(e.fonction)}</p></div><div class="seg row">${ST.map(s=>`<button class="${s} ${a.s==s?'on':''}" onclick="setAtt('${d}','${e.id}','${s}')">${t(s)}</button>`).join('')}</div>${a.s=='late'?`<input type=number min=0 value="${a.m||0}" style="width:80px" onchange="setMin('${d}','${e.id}',this.value)" aria-label="min"> ${t('min')}`:''}</div>`}).join(''):`<div class=empty>${t('none')}</div>`;
+const ds=Object.keys(S.att).sort().reverse();
+h+=`<h2>${t('hist')}</h2>`+ds.map(dt=>`<div class=card><b>${dt}</b><div class=grow>${S.emp.map(e=>{const a=S.att[dt][e.id];return a?`<span class=tag>${esc(e.prenom)}: ${t(a.s)}${a.s=='late'?' '+a.m+"'":''}</span> `:''}).join('')}</div></div>`).join('');return h}
+function dash(){const d=today(),pr=S.emp.filter(e=>['present','late'].includes(((S.att[d]||{})[e.id]||{}).s)).length,g=S.gaps.reduce((n,x)=>n+ +x.amount,0);
+const st=[['emp',S.emp.length,t('emp')],['att',pr+' / '+S.emp.length,t('ps')],['tasks',S.tasks.filter(x=>!x.done).length,t('tp')],['recl',S.recl.filter(x=>x.status!='closed').length,t('oc')],['needs',S.needs.filter(x=>!x.done).length,t('npn')],['gaps',g+' DA',t('gt')]];
+return `<div class=grid>${st.map(([k,v,l])=>`<div class=stat onclick="go('${k}')"><b dir=ltr>${v}</b><span>${l}</span></div>`).join('')}</div><h2>${t('tasks')}</h2>`+(S.tasks.filter(x=>!x.done).slice(0,5).map(x=>`<div class=card>${M.tasks.row(x)}</div>`).join('')||`<div class=empty>${t('none')}</div>`)}
+function build(d){const A=S.att[d]||{},tk=S.tasks.filter(x=>(x.when||'').slice(0,10)==d),gp=S.gaps.filter(x=>x.date==d),rc=S.recl.filter(x=>x.status!='closed'),nd=S.needs.filter(x=>!x.done),tg=gp.reduce((n,x)=>n+ +x.amount,0);
+const tb=(h,rows)=>rows.length?`<table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</table>`:`<p>—</p>`;
+return `<h2 style="margin-top:0">LIBRAOS — ${t('rep')}</h2><p>${esc(S.owner.name)} · ${d}</p>
+<h3>${t('att')}</h3>${tb([t('who'),t('status')],S.emp.map(e=>[e.prenom+' '+e.nom,A[e.id]?t(A[e.id].s)+(A[e.id].s=='late'?' ('+A[e.id].m+' min)':''):'—']))}
+<h3>${t('tasks')}</h3>${tb([t('title'),t('who'),t('status')],tk.map(x=>[x.title,empName(x.who),x.done?t('done'):t('pending')]))}
+<h3>${t('gaps')}</h3>${tb([t('agent'),t('amount'),t('note')],gp.map(x=>[empName(x.agent),x.amount+' DA',x.note]))}<p><b>${t('total')}: ${tg} DA</b></p>
+<h3>${t('recl')}</h3>${tb([t('subject'),t('nom'),t('type')],rc.map(x=>[x.subject,x.nom,t(x.type)]))}
+<h3>${t('needs')}</h3>${tb([t('shop'),t('item'),t('qty')],nd.map(x=>[x.shop,x.item,x.qty]))}`}
+function repView(){return `<div class="row noprint" style="margin-bottom:14px"><label>${t('date')}<input type=date value="${repDate}" onchange="repDate=this.value;go('rep')"></label><button class=g onclick="window.print()">🖨 ${t('print')}</button><button class=b onclick="saveRep()">${t('saveH')}</button></div>
+<div class=rep>${build(repDate)}</div><div class=noprint><h2>${t('hist')}</h2>${S.reports.length?[...S.reports].reverse().map(r=>`<div class=card><b>${r.date}</b><div class=grow><p>${new Date(r.saved).toLocaleString()}</p></div><button class=g onclick="viewRep('${r.id}')">${t('view')}</button><button class=d onclick="rm('reports','${r.id}')">✕</button></div>`).join(''):`<div class=empty>${t('none')}</div>`}</div>`}
+function saveRep(){S.reports.push({id:uid(),date:repDate,saved:Date.now(),html:build(repDate)});save();go('rep');toast(t('saved'))}
+function viewRep(id){const r=S.reports.find(x=>x.id==id),m=document.createElement('div');m.className='modal';m.innerHTML=`<form style="max-width:720px"><div class=rep>${r.html}</div><div class=row><button type=button class=b onclick="window.print()">🖨 ${t('print')}</button><button type=button class=g onclick="this.closest('.modal').remove()">${t('cancel')}</button></div></form>`;document.body.appendChild(m)}
+function setView(){const o=S.owner;tmpPhoto=o.photo;return `<form class=card style="display:block;max-width:520px" onsubmit="saveSet(event)"><div class=row>${av({photo:o.photo,prenom:o.name})}<input type=file accept="image/*" onchange="pic(this,p=>S.owner.photo=p)" style="flex:1"></div>
+<label>${t('owner')}<input name=name value="${esc(o.name)}"></label><label>${t('tel')}<input name=phone dir=ltr value="${esc(o.phone)}"></label>
+<label>${t('shops')}<input name=shops value="${esc(o.shops.join(', '))}"></label><label>${t('info')}<textarea name=extra rows=3>${esc(o.extra)}</textarea></label>
+<label>${t('lang')}<select name=lang><option value=fr ${S.lang=='fr'?'selected':''}>Français</option><option value=ar ${S.lang=='ar'?'selected':''}>العربية</option></select></label>
+<label>${t('theme')}<select name=theme><option value="">Auto</option><option value=dark>Dark</option><option value=light>Light</option></select></label>
+<div class=row style="margin-top:12px"><button class=b>${t('save')}</button><button type=button class=g onclick="exp()">${t('backup')}</button><label class=g style="flex-direction:row;cursor:pointer">${t('restore')}<input type=file accept=.json hidden onchange="imp(this)"></label></div></form>`}
+function saveSet(e){e.preventDefault();const f=e.target.elements,o=S.owner;o.name=f.name.value;o.phone=f.phone.value;o.shops=f.shops.value.split(',').map(s=>s.trim()).filter(Boolean);o.extra=f.extra.value;S.lang=f.lang.value;S.theme=f.theme.value;save();go('set');toast(t('saved'))}
+function exp(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='libraos-backup-'+today()+'.json';a.click()}
+function imp(i){const r=new FileReader();r.onload=()=>{try{S=JSON.parse(r.result);save();go('set')}catch(e){alert('Invalid file')}};r.readAsText(i.files[0])}
+function go(v){view=v;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang=='ar'?'rtl':'ltr';
+if(S.theme)document.documentElement.dataset.theme=S.theme;else delete document.documentElement.dataset.theme;
+document.title='LIBRAOS — '+t(v);
+$('#sb').classList.remove('open');
+$('#sb').innerHTML=`<div class=logo><svg width=38 height=38 viewBox="0 0 40 40"><path d="M3 12l16 3v18L3 30z" fill="#0a5cff"/><path d="M21 15l16-3v18l-16 3z" fill="#00c2ff"/><path d="M19 15h2v18h-2z" fill="#fff"/><rect x=30 y=2 width=5 height=5 rx=1 fill="#00c2ff"/></svg><div>LIBRA<b>OS</b><small>${t('tagline')}</small></div></div><nav>${NAV.map(([k,i])=>`<button class="${k==v?'on':''}" onclick="go('${k}')"><i>${i}</i>${t(k)}</button>`).join('')}</nav><div class=by>${t('by')}</div>`;
+const body=v=='dash'?dash():v=='att'?attView():v=='rep'?repView():v=='set'?setView():list(v);
+$('#mn').innerHTML=`<header class=top><button id=burger class=g onclick="$('#sb').classList.toggle('open')">☰</button><h1>${t(v)}</h1>${S.owner.name?`<span class=tag>${esc(S.owner.name)}</span>`:''}</header>${body}`;scrollTo(0,0)}
+
+/* ---- Android (Capacitor) : share files instead of download / print ---- */
+async function shareFile(name,data,mime){const C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform()))return false;
+try{const{Filesystem,Share}=C.Plugins;const r=await Filesystem.writeFile({path:name,data:btoa(unescape(encodeURIComponent(data))),directory:'CACHE'});await Share.share({title:name,url:r.uri});}catch(e){alert('Share error: '+(e.message||e))}return true}
+const _exp=exp;exp=async function(){if(!await shareFile('libraos-backup-'+today()+'.json',JSON.stringify(S)))_exp()};
+const _pr=window.print.bind(window);
+window.print=async function(){const r=document.querySelector('.modal .rep')||document.querySelector('.rep');
+if(!r)return _pr();const h='<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>LIBRAOS</title><style>body{font-family:sans-serif;padding:16px;color:#111}table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #ccc;padding:5px;text-align:start}h2,h3{color:#0a2a8a}</style></head><body dir="'+document.documentElement.dir+'">'+r.innerHTML+'</body></html>';
+if(!await shareFile('rapport-'+today()+'.html',h))_pr()};
+go('dash');
+</script></body></html>

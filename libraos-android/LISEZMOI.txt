@@ -1,0 +1,14 @@
+LIBRAOS pour Android
+
+METHODE 1 - sans Android Studio (GitHub, gratuit)
+1) Creez un compte sur github.com et un nouveau depot "libraos".
+2) Envoyez-y tout le contenu de ce dossier (y compris le dossier cache .github).
+3) Onglet "Actions" > "Build LIBRAOS APK" > attendez ~5 minutes.
+4) Ouvrez l'execution terminee > "Artifacts" > telechargez LIBRAOS-apk (zip contenant app-debug.apk).
+5) Copiez app-debug.apk sur le telephone, ouvrez-le et autorisez "sources inconnues".
+
+METHODE 2 - sur PC avec Android Studio
+npm install ; npx cap add android ; npx cap sync android ; npx cap open android
+Puis Build > Build APK(s).
+
+Sur Android, "Imprimer" et "Exporter la sauvegarde" ouvrent le menu Partager (WhatsApp, Drive, imprimante...).
