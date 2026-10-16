@@ -25,6 +25,8 @@ jobs:
       - name: Create Android project (only if missing)
         run: '[ -d android ] || npx cap add android'
         working-directory: ${{ steps.d.outputs.dir }}
+        - name: Install ImageMagick
+  run: sudo apt-get update && sudo apt-get install -y imagemagick
       - name: Install LIBRAOS app icon
         working-directory: ${{ steps.d.outputs.dir }}
         shell: bash
