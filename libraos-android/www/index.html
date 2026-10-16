@@ -67,7 +67,7 @@ const T={fr:{dash:'Tableau de bord',emp:'Employés',tasks:'Tâches',att:'Pointag
 ar:{dash:'لوحة التحكم',emp:'الموظفون',tasks:'المهام',att:'الحضور',needs:'احتياجات المحلات',recl:'الشكاوى',gaps:'عجز الصندوق',rep:'تقرير نهاية اليوم',set:'الإعدادات',add:'إضافة',save:'حفظ',del:'حذف',cancel:'إلغاء',nom:'اللقب',prenom:'الاسم',tel:'رقم الهاتف',photo:'صورة الملف الشخصي',fonction:'الوظيفة',info:'معلومات إضافية',title:'المهمة',who:'الموظف',when:'التاريخ والوقت',done:'منجزة',pending:'قيد التنفيذ',present:'حاضر',absent:'غائب',rest:'راحة',late:'متأخر',min:'دقيقة تأخر',shop:'المحل',item:'الحاجة',qty:'الكمية',type:'النوع',client:'زبون',employee:'موظف',subject:'الموضوع',details:'التفاصيل',status:'الحالة',open:'مفتوحة',closed:'تمت المعالجة',date:'التاريخ',agent:'العون',amount:'المبلغ (+/-)',note:'ملاحظة',print:'طباعة',saveH:'حفظ في السجل',hist:'السجل',none:'لا يوجد شيء بعد. اضغط إضافة.',owner:'اسم المالك',shops:'المحلات (مفصولة بفاصلة)',lang:'اللغة',backup:'تصدير نسخة احتياطية',restore:'استيراد نسخة احتياطية',total:'المجموع',saved:'تم الحفظ',sure:'حذف هذا العنصر؟',tagline:'نظام تسيير مكتبتك وقرطاسيتك',by:'تصميم ياسر',preview:'معاينة',view:'عرض',theme:'المظهر',bought:'تم الشراء',noshop:'أضف محلاً من الإعدادات',ps:'الحاضرون',tp:'مهام قيد التنفيذ',oc:'شكاوى مفتوحة',gt:'مجموع العجز',npn:'احتياجات معلقة'}};
 let S;try{S=JSON.parse(localStorage.getItem('libraos'))}catch(e){}
 S=Object.assign({lang:'fr',owner:{name:'',phone:'',photo:'',shops:['Magasin 1'],extra:''},emp:[],tasks:[],att:{},needs:[],recl:[],gaps:[],reports:[]},S||{});
-const save=()=>{try{localStorage.setItem('libraos',JSON.stringify(S))}catch(e){alert('Storage full')}};
+const save=()=>{try{localStorage.setItem('libraos',JSON.stringify(S))}catch(e){toast('Storage full')}};
 const t=k=>T[S.lang][k]||k;
 let view='dash',repDate=today(),attDate=today();
 const NAV=[['dash','▦'],['emp','☺'],['tasks','✔'],['att','◷'],['needs','▤'],['recl','⚑'],['gaps','⚠'],['rep','▣'],['set','⚙']];
@@ -82,13 +82,14 @@ recl:{f:[['type',['client','employee']],['nom','text'],['subject','text'],['deta
 gaps:{f:[['date','date'],['agent','emp'],['amount','number'],['note','text']],row:x=>`<div class=grow><h3>${esc(empName(x.agent))}</h3><p>${esc(x.date)} ${esc(x.note)}</p></div><b class="${x.amount<0?'bad':'ok'}" dir=ltr>${x.amount>0?'+':''}${x.amount} DA</b>`}};
 function tog(k,id,f){const x=S[k].find(a=>a.id==id);x[f]=!x[f];save();go(view)}
 function list(k){let a=S[k];if(k=='gaps')a=[...a].sort((x,y)=>y.date.localeCompare(x.date));
-let h=`<div class=row style="margin-bottom:14px"><button class=b onclick="form('${k}')">+ ${t('add')}</button></div>`;
+let h=`<div class=row style="margin-bottom:14px"><button class=b onclick="openForm('${k}')">+ ${t('add')}</button></div>`;
 if(k=='gaps'){const s=a.reduce((n,x)=>n+ +x.amount,0);h+=`<div class=stat style="cursor:default;margin-bottom:14px"><span>${t('total')}</span><b class="${s<0?'bad':'ok'}" dir=ltr>${s} DA</b></div>`}
-h+=a.length?a.map(x=>`<div class=card>${M[k].row(x)}<button class=g onclick="form('${k}','${x.id}')">✎</button><button class=d onclick="rm('${k}','${x.id}')">✕</button></div>`).join(''):`<div class=empty>${t('none')}</div>`;return h}
-function rm(k,id){if(confirm(t('sure'))){S[k]=S[k].filter(x=>x.id!=id);save();go(view)}}
+h+=a.length?a.map(x=>`<div class=card>${M[k].row(x)}<button class=g onclick="openForm('${k}','${x.id}')">✎</button><button class=d onclick="rm('${k}','${x.id}')">✕</button></div>`).join(''):`<div class=empty>${t('none')}</div>`;return h}
+function ask(msg,ok){const m=document.createElement('div');m.className='modal';m.innerHTML='<form><p style="margin:0">'+msg+'</p><div class=row><button class=b>OK</button><button type=button class=g>'+t('cancel')+'</button></div></form>';m.querySelector('form').onsubmit=e=>{e.preventDefault();m.remove();ok()};m.querySelector('.g').onclick=()=>m.remove();document.body.appendChild(m)}
+function rm(k,id){ask(t('sure'),()=>{S[k]=S[k].filter(x=>x.id!=id);save();go(view)})}
 let tmpPhoto='';
 function opts(f){if(Array.isArray(f))return f.map(v=>[v,t(v)]);if(f=='emp')return S.emp.map(e=>[e.id,e.prenom+' '+e.nom]);if(f=='shop')return S.owner.shops.map(s=>[s,s])}
-function form(k,id){const x=id?S[k].find(a=>a.id==id):{};tmpPhoto=x.photo||'';
+function openForm(k,id){const x=id?S[k].find(a=>a.id==id):{};tmpPhoto=x.photo||'';
 const def={date:today(),type:'client',status:'open'};
 const fs=M[k].f.map(([n,ty])=>{const v=x[n]??def[n]??'';let i;
 if(ty=='area')i=`<textarea name=${n} rows=3>${esc(v)}</textarea>`;
@@ -100,7 +101,7 @@ return `<label>${t(n)}${i}</label>`}).join('');
 const m=document.createElement('div');m.className='modal';
 m.innerHTML=`<form><h2 style="margin:0">${t(k)}</h2>${fs}<div class=row><button class=b>${t('save')}</button><button type=button class=g onclick="this.closest('.modal').remove()">${t('cancel')}</button></div></form>`;
 m.querySelector('form').onsubmit=e=>{e.preventDefault();const r=x.id?x:{id:uid()};
-M[k].f.forEach(([n,ty])=>{const el=e.target.elements[n];if(ty=='photo')r.photo=tmpPhoto;else if(ty=='chk')r[n]=el.checked;else r[n]=ty=='number'?+el.value||0:el.value});
+M[k].f.forEach(([n,ty])=>{const el=e.target.querySelector('[name="'+n+'"]');if(ty=='photo')r.photo=tmpPhoto;else if(ty=='chk')r[n]=el.checked;else r[n]=ty=='number'?+el.value||0:el.value});
 if(!x.id)S[k].push(r);save();m.remove();go(view);toast(t('saved'))};
 document.body.appendChild(m)}
 function pic(inp,cb){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),s=Math.min(1,200/Math.max(im.width,im.height));c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);tmpPhoto=c.toDataURL('image/jpeg',.8);if(cb)cb(tmpPhoto)};im.src=r.result};r.readAsDataURL(f)}
@@ -128,15 +129,15 @@ function repView(){return `<div class="row noprint" style="margin-bottom:14px"><
 <div class=rep>${build(repDate)}</div><div class=noprint><h2>${t('hist')}</h2>${S.reports.length?[...S.reports].reverse().map(r=>`<div class=card><b>${r.date}</b><div class=grow><p>${new Date(r.saved).toLocaleString()}</p></div><button class=g onclick="viewRep('${r.id}')">${t('view')}</button><button class=d onclick="rm('reports','${r.id}')">✕</button></div>`).join(''):`<div class=empty>${t('none')}</div>`}</div>`}
 function saveRep(){S.reports.push({id:uid(),date:repDate,saved:Date.now(),html:build(repDate)});save();go('rep');toast(t('saved'))}
 function viewRep(id){const r=S.reports.find(x=>x.id==id),m=document.createElement('div');m.className='modal';m.innerHTML=`<form style="max-width:720px"><div class=rep>${r.html}</div><div class=row><button type=button class=b onclick="window.print()">🖨 ${t('print')}</button><button type=button class=g onclick="this.closest('.modal').remove()">${t('cancel')}</button></div></form>`;document.body.appendChild(m)}
-function setView(){const o=S.owner;tmpPhoto=o.photo;return `<form class=card style="display:block;max-width:520px" onsubmit="saveSet(event)"><div class=row>${av({photo:o.photo,prenom:o.name})}<input type=file accept="image/*" onchange="pic(this,p=>S.owner.photo=p)" style="flex:1"></div>
+function setView(){const o=S.owner;tmpPhoto=o.photo;return `<form class=card style="display:block;max-width:520px" onsubmit="saveSet(event)"><div class=row>${av({photo:o.photo,prenom:o.name})}<input type=file accept="image/*" onchange="pic(this,p=>{S.owner.photo=p;save();const a=document.querySelector('.card .av');if(a)a.style.backgroundImage='url('+p+')'})" style="flex:1"></div>
 <label>${t('owner')}<input name=name value="${esc(o.name)}"></label><label>${t('tel')}<input name=phone dir=ltr value="${esc(o.phone)}"></label>
 <label>${t('shops')}<input name=shops value="${esc(o.shops.join(', '))}"></label><label>${t('info')}<textarea name=extra rows=3>${esc(o.extra)}</textarea></label>
 <label>${t('lang')}<select name=lang><option value=fr ${S.lang=='fr'?'selected':''}>Français</option><option value=ar ${S.lang=='ar'?'selected':''}>العربية</option></select></label>
 <label>${t('theme')}<select name=theme><option value="">Auto</option><option value=dark>Dark</option><option value=light>Light</option></select></label>
 <div class=row style="margin-top:12px"><button class=b>${t('save')}</button><button type=button class=g onclick="exp()">${t('backup')}</button><label class=g style="flex-direction:row;cursor:pointer">${t('restore')}<input type=file accept=.json hidden onchange="imp(this)"></label></div></form>`}
-function saveSet(e){e.preventDefault();const f=e.target.elements,o=S.owner;o.name=f.name.value;o.phone=f.phone.value;o.shops=f.shops.value.split(',').map(s=>s.trim()).filter(Boolean);o.extra=f.extra.value;S.lang=f.lang.value;S.theme=f.theme.value;save();go('set');toast(t('saved'))}
+function saveSet(e){e.preventDefault();const q=n=>e.target.querySelector('[name="'+n+'"]').value,o=S.owner;o.name=q('name');o.phone=q('phone');o.shops=q('shops').split(',').map(x=>x.trim()).filter(Boolean);o.extra=q('extra');S.lang=q('lang');S.theme=q('theme');save();go('set');toast(t('saved'))}
 function exp(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='libraos-backup-'+today()+'.json';a.click()}
-function imp(i){const r=new FileReader();r.onload=()=>{try{S=JSON.parse(r.result);save();go('set')}catch(e){alert('Invalid file')}};r.readAsText(i.files[0])}
+function imp(i){const r=new FileReader();r.onload=()=>{try{S=JSON.parse(r.result);save();go('set')}catch(e){toast('Invalid file')}};r.readAsText(i.files[0])}
 function go(v){view=v;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang=='ar'?'rtl':'ltr';
 if(S.theme)document.documentElement.dataset.theme=S.theme;else delete document.documentElement.dataset.theme;
 document.title='LIBRAOS — '+t(v);
