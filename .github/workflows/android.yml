@@ -22,8 +22,16 @@ jobs:
           java-version: 17
       - run: npm install
         working-directory: ${{ steps.d.outputs.dir }}
-      - run: npx cap add android
+      - name: Create Android project (only if missing)
+        run: '[ -d android ] || npx cap add android'
         working-directory: ${{ steps.d.outputs.dir }}
+      - name: Install LIBRAOS app icon
+        working-directory: ${{ steps.d.outputs.dir }}
+        run: |
+          test -d icons/res || { echo "ERROR: icons/res folder is missing next to capacitor.config.json"; exit 1; }
+          find android/app/src/main/res -name "ic_launcher*.webp" -delete
+          cp -r icons/res/* android/app/src/main/res/
+          echo "Icon installed:"; ls android/app/src/main/res/mipmap-xxxhdpi
       - run: npx cap sync android
         working-directory: ${{ steps.d.outputs.dir }}
       - run: chmod +x gradlew && ./gradlew assembleDebug
