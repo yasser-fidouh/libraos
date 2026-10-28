@@ -57,8 +57,8 @@ input,select,textarea{background:var(--bg);color:var(--tx);border:1px solid var(
 .seg button.on.late{background:var(--warn);color:#220;border-color:var(--warn)}
 .empty{color:var(--mut);padding:30px;text-align:center;border:1px dashed var(--line);border-radius:14px}
 h2{font-size:18px;margin:22px 0 10px}
-.rep{background:#fff;color:#111;border-radius:12px;padding:24px}
-.rep h2,.rep h3{margin:14px 0 6px;font-size:14px}.rep,.rep p,.rep td,.rep th,.rep div{font-size:12px}.rep table{width:100%;border-collapse:collapse;font-size:14px}.rep td,.rep th{border-bottom:1px solid #ddd;padding:5px;text-align:start}
+.rep{background:#fff;color:#111;border-radius:12px;padding:24px;font-size:12px}
+.rep h2,.rep h3{color:var(--bl);margin:14px 0 6px;font-size:14px}.rep table{width:100%;border-collapse:collapse;font-size:12px}.rep td,.rep th{border-bottom:1px solid #ddd;padding:5px;text-align:start;font-size:12px}.rep .st-absent{color:#e53935;font-weight:600}.rep .st-late{color:#f9a825;font-weight:600}.rep .st-rest{color:#1e88e5;font-weight:600}.rep .st-present{color:#111}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ok);color:#022;padding:8px 18px;border-radius:99px;font-weight:600;z-index:99}
 @media(max-width:820px){aside{position:fixed;inset:0 auto 0 0;z-index:40;transform:translateX(-105%);transition:transform .2s}[dir=rtl] aside{inset:0 0 0 auto;transform:translateX(105%)}aside.open{transform:none}#burger{display:inline-block}main{padding:16px}}
 @media print{.modal{position:static;background:none;display:block;padding:0}.modal form{border:0;max-height:none;overflow:visible;padding:0;background:none}body:has(.modal .rep) #app{display:none}aside,header.top,.noprint{display:none!important}body{background:#fff}main{padding:0;max-width:none}.rep{padding:0}}
@@ -68,7 +68,7 @@ h2{font-size:18px;margin:22px 0 10px}
 <script>
 const $=s=>document.querySelector(s),uid=()=>Math.random().toString(36).slice(2,9),today=()=>new Date().toISOString().slice(0,10);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const T={fr:{dash:'Tableau de bord',emp:'Employés',tasks:'Tâches',att:'Pointages',needs:'Besoins des magasins',recl:'Réclamations',gaps:'Manques de caisse',rep:'Rapport de fin de journée',set:'Paramètres',add:'Ajouter',save:'Enregistrer',del:'Supprimer',cancel:'Annuler',nom:'Nom',prenom:'Prénom',tel:'N° téléphone',photo:'Photo de profil',fonction:'Fonction',info:'Infos supplémentaires',title:'Tâche',who:'Employé',when:'Date et heure',done:'Terminée',pending:'En cours',present:'Présent',absent:'Absent',rest:'Repos',late:'Retard',min:'min de retard',shop:'Magasin',item:'Besoin',qty:'Quantité',type:'Type',client:'Client',employee:'Employé',subject:'Objet',details:'Détails',status:'Statut',open:'Ouverte',closed:'Résolue',date:'Date',agent:'Agent',amount:'Montant (+/-)',note:'Note',print:'Imprimer',saveH:'Sauvegarder dans l\'historique',hist:'Historique',none:'Rien pour le moment. Appuyez sur Ajouter.',owner:'Nom du propriétaire',shops:'Magasins (séparés par une virgule)',lang:'Langue',backup:'Exporter la sauvegarde',restore:'Importer une sauvegarde',total:'Total',saved:'Enregistré',sure:'Supprimer cet élément ?',arrive:'Arrivé à',start:'Heure de début de travail',startMatin:'Entrée matin',startSoir:'Entrée soir',shift:'Poste',matin:'Matin',soir:'Soir',colors:'Couleurs de l\'application',logo:'Logo de l\'entreprise',tagline:'Le système de gestion de votre papeterie & librairie',by:'Conçu par Yasser',preview:'Aperçu',view:'Voir',theme:'Thème',bought:'Acheté',noshop:'Ajoutez un magasin dans Paramètres',ps:'Présents',tp:'Tâches en cours',oc:'Réclamations ouvertes',gt:'Total des manques',npn:'Besoins en attente'},
+const T={fr:{dash:'Tableau de bord',emp:'Employés',tasks:'Tâches',att:'Pointages',needs:'Besoins des magasins',recl:'Réclamations',gaps:'Manques de caisse',rep:'Rapport de fin de journée',set:'Paramètres',add:'Ajouter',save:'Enregistrer',del:'Supprimer',cancel:'Annuler',nom:'Nom',prenom:'Prénom',tel:'N° téléphone',photo:'Photo de profil',fonction:'Fonction',info:'Infos supplémentaires',title:'Tâche',who:'Employé',when:'Date et heure',done:'Terminée',pending:'En cours',present:'Présent',absent:'Absent',rest:'Repos',late:'Retard',min:'min de retard',shop:'Magasin',item:'Besoin',qty:'Quantité',type:'Type',client:'Client',employee:'Employé',subject:'Objet',details:'Détails',status:'Statut',open:'Ouverte',closed:'Résolue',date:'Date',agent:'Agent',amount:'Montant (+/-)',note:'Note',print:'Imprimer',saveH:'Sauvegarder dans l\'historique',hist:'Historique',none:'Rien pour le moment. Appuyez sur Ajouter.',owner:'Nom du propriétaire',shops:'Magasins (séparés par une virgule)',lang:'Langue',backup:'Exporter la sauvegarde',restore:'Importer une sauvegarde',total:'Total',saved:'Enregistré',sure:'Supprimer cet élément ?',arrive:'Arrivé à',start:'Heure de début de travail',startMatin:'Entrée matin',startSoir:'Entrée soir',shift:'Équipe',matin:'Matin',soir:'Soir',colors:'Couleurs de l\'application',logo:'Logo de l\'entreprise',tagline:'Le système de gestion de votre papeterie & librairie',by:'Conçu par Yasser',preview:'Aperçu',view:'Voir',theme:'Thème',bought:'Acheté',noshop:'Ajoutez un magasin dans Paramètres',ps:'Présents',tp:'Tâches en cours',oc:'Réclamations ouvertes',gt:'Total des manques',npn:'Besoins en attente'},
 ar:{dash:'لوحة التحكم',emp:'الموظفون',tasks:'المهام',att:'الحضور',needs:'احتياجات المحلات',recl:'الشكاوى',gaps:'عجز الصندوق',rep:'تقرير نهاية اليوم',set:'الإعدادات',add:'إضافة',save:'حفظ',del:'حذف',cancel:'إلغاء',nom:'اللقب',prenom:'الاسم',tel:'رقم الهاتف',photo:'صورة الملف الشخصي',fonction:'الوظيفة',info:'معلومات إضافية',title:'المهمة',who:'الموظف',when:'التاريخ والوقت',done:'منجزة',pending:'قيد التنفيذ',present:'حاضر',absent:'غائب',rest:'راحة',late:'متأخر',min:'دقيقة تأخر',shop:'المحل',item:'الحاجة',qty:'الكمية',type:'النوع',client:'زبون',employee:'موظف',subject:'الموضوع',details:'التفاصيل',status:'الحالة',open:'مفتوحة',closed:'تمت المعالجة',date:'التاريخ',agent:'العون',amount:'المبلغ (+/-)',note:'ملاحظة',print:'طباعة',saveH:'حفظ في السجل',hist:'السجل',none:'لا يوجد شيء بعد. اضغط إضافة.',owner:'اسم المالك',shops:'المحلات (مفصولة بفاصلة)',lang:'اللغة',backup:'تصدير نسخة احتياطية',restore:'استيراد نسخة احتياطية',total:'المجموع',saved:'تم الحفظ',sure:'حذف هذا العنصر؟',arrive:'وصل على الساعة',start:'وقت بداية العمل',startMatin:'دخول الصباح',startSoir:'دخول المساء',shift:'الوردية',matin:'صباح',soir:'مساء',colors:'ألوان التطبيق',logo:'شعار المؤسسة',tagline:'نظام تسيير مكتبتك وقرطاسيتك',by:'تصميم ياسر',preview:'معاينة',view:'عرض',theme:'المظهر',bought:'تم الشراء',noshop:'أضف محلاً من الإعدادات',ps:'الحاضرون',tp:'مهام قيد التنفيذ',oc:'شكاوى مفتوحة',gt:'مجموع العجز',npn:'احتياجات معلقة'}};
 let S;try{S=JSON.parse(localStorage.getItem('libraos'))}catch(e){}
 S=Object.assign({lang:'fr',owner:{name:'',phone:'',photo:'',shops:['Magasin 1'],extra:''},emp:[],tasks:[],att:{},needs:[],recl:[],gaps:[],reports:[]},S||{});
@@ -114,7 +114,7 @@ function toast(m){const d=document.createElement('div');d.className='toast';d.te
 const ST=['present','absent','rest','late'];
 function setAtt(d,id,s){(S.att[d]??={})[id]??={};S.att[d][id].s=s;S.att[d][id].m=0;S.att[d][id].t=s=='late'?(S.att[d][id].t||''):'';save();go('att')}
 function setTime(d,id,v){S.att[d][id].t=v;save()}
-function lt(a,e){if(!a||a.s!='late')return '';if(!a.t)return a.m?' ('+a.m+' min)':'';let x=' · '+t('arrive')+' '+a.t;const sh=(e&&e.shift)||'matin';const st=sh==='soir'?(S.owner.startSoir||S.owner.start):(S.owner.startMatin||S.owner.start);if(st){const df=(+a.t.slice(0,2)*60+ +a.t.slice(3))-(+st.slice(0,2)*60+ +st.slice(3));if(df>0)x+=' (+'+df+' min)'}return x}
+function lt(a,e){if(!a||a.s!='late')return '';if(!a.t)return a.m?' ('+a.m+' min)':'';let x=' · '+t('arrive')+' '+a.t;const st=(e&&e.shift=='soir'?S.owner.startSoir:S.owner.startMatin)||S.owner.start;if(st){const df=(+a.t.slice(0,2)*60+ +a.t.slice(3))-(+st.slice(0,2)*60+ +st.slice(3));if(df>0)x+=' (+'+df+' min)'}return x}
 function attView(){const d=attDate;
 let h=`<div class=row style="margin-bottom:14px"><label>${t('date')}<input type=date value="${d}" onchange="attDate=this.value||today();go('att')"></label></div>`;
 h+=S.emp.length?S.emp.map(e=>{const a=(S.att[d]||{})[e.id]||{};return `<div class=card>${av(e)}<div class=grow><h3>${esc(e.prenom)} ${esc(e.nom)}</h3><p>${esc(e.fonction)}</p></div><div class="seg row">${ST.map(s=>`<button class="${s} ${a.s==s?'on':''}" onclick="setAtt('${d}','${e.id}','${s}')">${t(s)}</button>`).join('')}</div>${a.s=='late'?`<label style="flex-direction:row;align-items:center;gap:8px">${t('arrive')}<input type=time value="${a.t||''}" style="width:130px" onchange="setTime('${d}','${e.id}',this.value)"></label>`:''}</div>`}).join(''):`<div class=empty>${t('none')}</div>`;
@@ -123,17 +123,17 @@ h+=`<h2>${t('hist')}</h2>`+ds.map(dt=>`<div class=card><b>${dt}</b><div class=gr
 function dash(){const d=today(),pr=S.emp.filter(e=>['present','late'].includes(((S.att[d]||{})[e.id]||{}).s)).length,g=S.gaps.reduce((n,x)=>n+ +x.amount,0);
 const st=[['emp',S.emp.length,t('emp')],['att',pr+' / '+S.emp.length,t('ps')],['tasks',S.tasks.filter(x=>!x.done).length,t('tp')],['recl',S.recl.filter(x=>x.status!='closed').length,t('oc')],['needs',S.needs.filter(x=>!x.done).length,t('npn')],['gaps',g+' DA',t('gt')]];
 return `<div class=grid>${st.map(([k,v,l])=>`<div class=stat onclick="go('${k}')"><b dir=ltr>${v}</b><span>${l}</span></div>`).join('')}</div><h2>${t('tasks')}</h2>`+(S.tasks.filter(x=>!x.done).slice(0,5).map(x=>`<div class=card>${M.tasks.row(x)}</div>`).join('')||`<div class=empty>${t('none')}</div>`)}
-function themeColor(){const p=PAL[S.accent]||PAL.blue;return p.a[1]||'#0a2a8a'}
-function statusColor(s){return s==='absent'?'#c62828':s==='late'?'#f9a825':s==='rest'?'#1565c0':'#111'}
-function build(d){const A=S.att[d]||{},tk=S.tasks.filter(x=>(x.when||'').slice(0,10)==d),gp=S.gaps.filter(x=>x.date==d),rc=S.recl.filter(x=>x.status!='closed'),nd=S.needs.filter(x=>!x.done),tg=gp.reduce((n,x)=>n+ +x.amount,0),tc=themeColor();
-const tb=(h,rows)=>rows.length?`<table style="font-size:12px"><tr>${h.map(x=>`<th style="font-size:12px">${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td style="font-size:12px">${c}</td>`).join('')}</tr>`).join('')}</table>`:`<p style="font-size:12px">—</p>`;
-const attRows=S.emp.map(e=>{const st=A[e.id]?A[e.id].s:null;const label=st?t(st)+lt(A[e.id],e):'—';const col=st?statusColor(st):'#111';return [esc(e.prenom+' '+e.nom),`<span style="color:${col};font-weight:${st&&st!=='present'?'600':'400'}">${label}</span>`]});
-return `<div style="display:flex;align-items:center;gap:16px;border-bottom:2px solid ${tc};padding-bottom:10px;margin-bottom:6px">${S.owner.logo?`<img src="${S.owner.logo}" alt="logo" style="max-height:72px;max-width:180px;object-fit:contain">`:''}<div><h2 style="margin:0;font-size:14px;color:${tc}">${t('rep')}</h2><div style="font-size:12px">${esc(S.owner.name)}</div><div style="font-size:12px">${d}</div></div></div>
-<h3 style="font-size:14px;color:${tc}">${t('att')}</h3>${tb([t('who'),t('status')],attRows)}
-<h3 style="font-size:14px;color:${tc}">${t('tasks')}</h3>${tb([t('title'),t('who'),t('status')],tk.map(x=>[esc(x.title),esc(empName(x.who)),x.done?t('done'):t('pending')]))}
-<h3 style="font-size:14px;color:${tc}">${t('gaps')}</h3>${tb([t('agent'),t('amount'),t('note')],gp.map(x=>[esc(empName(x.agent)),x.amount+' DA',esc(x.note||'')]))}<p style="font-size:12px"><b>${t('total')}: ${tg} DA</b></p>
-<h3 style="font-size:14px;color:${tc}">${t('recl')}</h3>${tb([t('subject'),t('nom'),t('type')],rc.map(x=>[esc(x.subject),esc(x.nom),t(x.type)]))}
-<h3 style="font-size:14px;color:${tc}">${t('needs')}</h3>${tb([t('shop'),t('item'),t('qty')],nd.map(x=>[esc(x.shop),esc(x.item),esc(x.qty||'')]))}<p style="color:#888;font-size:11px;margin-top:16px">LIBRAOS</p>`}
+function build(d){const A=S.att[d]||{},tk=S.tasks.filter(x=>(x.when||'').slice(0,10)==d),gp=S.gaps.filter(x=>x.date==d),rc=S.recl.filter(x=>x.status!='closed'),nd=S.needs.filter(x=>!x.done),tg=gp.reduce((n,x)=>n+ +x.amount,0);
+const tc=getComputedStyle(document.documentElement).getPropertyValue('--bl').trim()||'#0a5cff';
+const stCol={absent:'#e53935',late:'#f9a825',rest:'#1e88e5',present:'#111'};
+const tb=(h,rows)=>rows.length?`<table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table>`:`<p>—</p>`;
+const attRows=S.emp.map(e=>{const a=A[e.id];const st=a?a.s:'';const label=a?t(a.s)+lt(a,e):'—';const col=stCol[st]||'#111';return [esc(e.prenom+' '+e.nom),`<span style="color:${col};font-weight:600">${label}</span>`]});
+return `<div style="display:flex;align-items:center;gap:16px;border-bottom:2px solid ${tc};padding-bottom:10px;margin-bottom:6px">${S.owner.logo?`<img src="${S.owner.logo}" alt="logo" style="max-height:72px;max-width:180px;object-fit:contain">`:''}<div><h2 style="margin:0;color:${tc};font-size:14px">${t('rep')}</h2><div style="font-size:12px">${esc(S.owner.name)}</div><div style="font-size:12px">${d}</div></div></div>
+<h3 style="color:${tc};font-size:14px">${t('att')}</h3>${tb([t('who'),t('status')],attRows)}
+<h3 style="color:${tc};font-size:14px">${t('tasks')}</h3>${tb([t('title'),t('who'),t('status')],tk.map(x=>[esc(x.title),esc(empName(x.who)),x.done?t('done'):t('pending')]))}
+<h3 style="color:${tc};font-size:14px">${t('gaps')}</h3>${tb([t('agent'),t('amount'),t('note')],gp.map(x=>[esc(empName(x.agent)),esc(x.amount+' DA'),esc(x.note)]))}<p style="font-size:12px"><b>${t('total')}: ${tg} DA</b></p>
+<h3 style="color:${tc};font-size:14px">${t('recl')}</h3>${tb([t('subject'),t('nom'),t('type')],rc.map(x=>[esc(x.subject),esc(x.nom),t(x.type)]))}
+<h3 style="color:${tc};font-size:14px">${t('needs')}</h3>${tb([t('shop'),t('item'),t('qty')],nd.map(x=>[esc(x.shop),esc(x.item),esc(x.qty)]))}<p style="color:#888;font-size:11px;margin-top:16px">LIBRAOS</p>`}
 function repView(){return `<div class="row noprint" style="margin-bottom:14px"><label>${t('date')}<input type=date value="${repDate}" onchange="repDate=this.value||today();go('rep')"></label><button class=g onclick="window.print()">🖨 ${t('print')}</button><button class=b onclick="saveRep()">${t('saveH')}</button></div>
 <div class=rep>${build(repDate)}</div><div class=noprint><h2>${t('hist')}</h2>${S.reports.length?[...S.reports].reverse().map(r=>`<div class=card><b>${r.date}</b><div class=grow><p>${new Date(r.saved).toLocaleString()}</p></div><button class=g onclick="viewRep('${r.id}')">${t('view')}</button><button class=d onclick="rm('reports','${r.id}')">✕</button></div>`).join(''):`<div class=empty>${t('none')}</div>`}</div>`}
 const PIX='data:image/gif;base64,R0lGODlhAQABAAAAACw=';
@@ -145,11 +145,10 @@ function viewRep(id){const r=S.reports.find(x=>x.id==id),m=document.createElemen
 function setView(){const o=S.owner;tmpPhoto=o.photo;return `<form class=card style="display:block;max-width:520px" onsubmit="saveSet(event)"><div class=row>${av({photo:o.photo,prenom:o.name})}<input type=file accept="image/*" onchange="pic(this,p=>{S.owner.photo=p;save();const a=document.querySelector('.card .av');if(a)a.style.backgroundImage='url('+p+')'})" style="flex:1"></div>
 <div class=row style="margin:10px 0">${o.logo?`<img src="${o.logo}" alt="logo" style="height:48px;max-width:140px;object-fit:contain;background:#fff;border-radius:8px;padding:4px">`:''}<label style="flex:1">${t('logo')}<input type=file accept="image/*" onchange="picLogo(this)"></label>${o.logo?`<button type=button class=d onclick="rmLogo()" aria-label="x">✕</button>`:''}</div><label>${t('owner')}<input name=name value="${esc(o.name)}"></label><label>${t('tel')}<input name=phone dir=ltr value="${esc(o.phone)}"></label>
 <label>${t('shops')}<input name=shops value="${esc(o.shops.join(', '))}"></label><label>${t('info')}<textarea name=extra rows=3>${esc(o.extra)}</textarea></label>
-<label>${t('startMatin')}<input name=startMatin type=time value="${esc(o.startMatin||o.start||'')}"></label>
-<label>${t('startSoir')}<input name=startSoir type=time value="${esc(o.startSoir||'')}"></label><div style="font-size:13px;color:var(--mut)">${t('colors')}</div><div class=row id=sw style="margin:6px 0 10px">${Object.entries(PAL).map(([k,p])=>`<button type=button title="${p.n[S.lang]}" aria-label="${p.n[S.lang]}" data-k="${k}" onclick="setAccent('${k}')" style="width:38px;height:38px;border-radius:50%;cursor:pointer;border:3px solid ${(S.accent||'blue')==k?'var(--tx)':'transparent'};background:linear-gradient(135deg,${p.a[1]},${p.a[0]})"></button>`).join('')}</div><label>${t('lang')}<select name=lang><option value=fr ${S.lang=='fr'?'selected':''}>Français</option><option value=ar ${S.lang=='ar'?'selected':''}>العربية</option></select></label>
+<label>${t('startMatin')}<input name=startMatin type=time value="${esc(o.startMatin||o.start||'')}"></label><label>${t('startSoir')}<input name=startSoir type=time value="${esc(o.startSoir||'')}"></label><div style="font-size:13px;color:var(--mut)">${t('colors')}</div><div class=row id=sw style="margin:6px 0 10px">${Object.entries(PAL).map(([k,p])=>`<button type=button title="${p.n[S.lang]}" aria-label="${p.n[S.lang]}" data-k="${k}" onclick="setAccent('${k}')" style="width:38px;height:38px;border-radius:50%;cursor:pointer;border:3px solid ${(S.accent||'blue')==k?'var(--tx)':'transparent'};background:linear-gradient(135deg,${p.a[1]},${p.a[0]})"></button>`).join('')}</div><label>${t('lang')}<select name=lang><option value=fr ${S.lang=='fr'?'selected':''}>Français</option><option value=ar ${S.lang=='ar'?'selected':''}>العربية</option></select></label>
 <label>${t('theme')}<select name=theme><option value="">Auto</option><option value=dark ${S.theme=='dark'?'selected':''}>Dark</option><option value=light ${S.theme=='light'?'selected':''}>Light</option></select></label>
 <div class=row style="margin-top:12px"><button class=b>${t('save')}</button><button type=button class=g onclick="exp()">${t('backup')}</button><label class=g style="flex-direction:row;cursor:pointer">${t('restore')}<input type=file accept=.json hidden onchange="imp(this)"></label></div></form>`}
-function saveSet(e){e.preventDefault();const q=n=>e.target.querySelector('[name="'+n+'"]').value,o=S.owner;o.name=q('name');o.phone=q('phone');o.shops=q('shops').split(',').map(x=>x.trim()).filter(Boolean);o.extra=q('extra');o.startMatin=q('startMatin');o.startSoir=q('startSoir');o.start=o.startMatin;S.lang=q('lang');S.theme=q('theme');save();go('set');toast(t('saved'))}
+function saveSet(e){e.preventDefault();const q=n=>e.target.querySelector('[name="'+n+'"]').value,o=S.owner;o.name=q('name');o.phone=q('phone');o.shops=q('shops').split(',').map(x=>x.trim()).filter(Boolean);o.extra=q('extra');o.startMatin=q('startMatin');o.startSoir=q('startSoir');o.start=q('startMatin');S.lang=q('lang');S.theme=q('theme');save();go('set');toast(t('saved'))}
 function exp(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='libraos-backup-'+today()+'.json';a.click()}
 function imp(i){const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d||typeof d!=='object'||Array.isArray(d))throw 0;S=Object.assign({lang:'fr',owner:{name:'',phone:'',photo:'',shops:['Magasin 1'],extra:''},emp:[],tasks:[],att:{},needs:[],recl:[],gaps:[],reports:[]},d);S.owner=Object.assign({name:'',phone:'',photo:'',shops:['Magasin 1'],extra:''},S.owner);if(!T[S.lang])S.lang='fr';save();go('set');toast(t('saved'))}catch(e){toast('Invalid file')}};r.readAsText(i.files[0])}
 const PAL={blue:{n:{fr:'Bleu',ar:'أزرق'},a:['#00c2ff','#0a5cff'],on:'#fff'},
@@ -171,230 +170,12 @@ const body=v=='dash'?dash():v=='att'?attView():v=='rep'?repView():v=='set'?setVi
 $('#mn').innerHTML=`<header class=top><button id=burger class=g onclick="$('#sb').classList.toggle('open')">☰</button><h1>${t(v)}</h1>${S.owner.name?`<span class=tag>${esc(S.owner.name)}</span>`:''}</header>${body}`;scrollTo(0,0)}
 
 /* ---- Android (Capacitor) : share files instead of download / print ---- */
-function hexToRgb(hex){const h=(hex||'#0a2a8a').replace('#','');const full=h.length===3?h.split('').map(c=>c+c).join(''):h;const n=parseInt(full,16);return[(n>>16)&255,(n>>8)&255,n&255]}
-function pdfEscape(s){const map={'à':'a','â':'a','ä':'a','é':'e','è':'e','ê':'e','ë':'e','î':'i','ï':'i','ô':'o','ö':'o','ù':'u','û':'u','ü':'u','ç':'c','À':'A','Â':'A','Ä':'A','É':'E','È':'E','Ê':'E','Ë':'E','Î':'I','Ï':'I','Ô':'O','Ö':'O','Ù':'U','Û':'U','Ü':'U','Ç':'C','’':"'",'–':'-','—':'-'};
-return String(s||'').replace(/[àâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ’–—]/g,c=>map[c]||c).replace(/[^\x20-\x7E]/g,'?').replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)')}
-function buildReportHtml(d){
-  const body=build(d),tc=themeColor();
-  return `<!DOCTYPE html><html><head><meta charset=utf-8><title>LIBRAOS — ${d}</title>
-<style>
-*{box-sizing:border-box}body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:28px;color:#111;background:#fff;margin:0;max-width:800px}
-h2{margin:0;font-size:14px;color:${tc};font-weight:700}h3{font-size:14px;color:${tc};margin:16px 0 8px;font-weight:700}
-p,div,td,th{font-size:12px}table{width:100%;border-collapse:collapse}
-th{text-align:start;border-bottom:2px solid #ddd;padding:6px 5px;font-weight:600}
-td{border-bottom:1px solid #e8e8e8;padding:6px 5px}
-</style></head><body dir="${document.documentElement.dir}">${body}</body></html>`}
-
-function parseDataUrlImage(dataUrl){
-  if(!dataUrl||typeof dataUrl!=='string'||!dataUrl.startsWith('data:image/'))return null;
-  return new Promise(resolve=>{
-    const img=new Image();
-    img.onload=()=>{
-      try{
-        const max=400;
-        let w=img.width,h=img.height;
-        const sc=Math.min(1,max/Math.max(w,h));
-        w=Math.round(w*sc);h=Math.round(h*sc);
-        const c=document.createElement('canvas');
-        c.width=w;c.height=h;
-        const ctx=c.getContext('2d');
-        ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
-        ctx.drawImage(img,0,0,w,h);
-        const dataUrlJ=c.toDataURL('image/jpeg',0.9);
-        const b64=dataUrlJ.split(',')[1];
-        const raw=atob(b64);
-        resolve({raw,w,h,len:raw.length});
-      }catch(e){resolve(null)}
-    };
-    img.onerror=()=>resolve(null);
-    img.src=dataUrl;
-  });
-}
-
-async function buildVisualPdf(d){
-  const A=S.att[d]||{},tk=S.tasks.filter(x=>(x.when||'').slice(0,10)==d),gp=S.gaps.filter(x=>x.date==d),rc=S.recl.filter(x=>x.status!='closed'),nd=S.needs.filter(x=>!x.done),tg=gp.reduce((n,x)=>n+ +x.amount,0);
-  const tc=themeColor(),[tr,tg2,tb]=hexToRgb(tc);
-  const pageW=595,pageH=842,ml=40,mr=40;
-  const logo=await parseDataUrlImage(S.owner.logo||'');
-
-  // Collect text lines with style: {text, size, color:[r,g,b], bold, indent}
-  const lines=[];
-  function add(text,size,color,bold,indent){lines.push({text:String(text||''),size:size||11,color:color||[30,30,30],bold:!!bold,indent:indent||0})}
-  function addGap(){lines.push({gap:10})}
-  function addRule(color,w){lines.push({rule:true,color:color||[tr,tg2,tb],w:w||1.5})}
-
-  // Header lines (logo drawn separately)
-  add(t('rep'),14,[tr,tg2,tb],true, logo?130:0);
-  add(S.owner.name||'',11,[50,50,50],false, logo?130:0);
-  add(d,11,[50,50,50],false, logo?130:0);
-  addGap();
-  addRule([tr,tg2,tb],2);
-  addGap();
-
-  function section(title){add(title,13,[tr,tg2,tb],true);lines.push({rule:true,color:[tr,tg2,tb],w:0.8})}
-  function headCols(cols){add(cols.join('   |   '),10,[90,90,90],true)}
-  function dataRow(parts,color){add(parts.join('   ·   '),11,color||[30,30,30],false)}
-
-  section(t('att'));
-  headCols([t('who'),t('status')]);
-  if(!S.emp.length)add('—',11,[140,140,140]);
-  else S.emp.forEach(e=>{
-    const a=A[e.id];const st=a?a.s:null;
-    const label=st?t(st)+lt(a,e):'—';
-    let col=[30,30,30];
-    if(st==='absent')col=[198,40,40];
-    else if(st==='late')col=[200,140,0];
-    else if(st==='rest')col=[21,101,192];
-    dataRow([e.prenom+' '+e.nom, label], col);
-  });
-  addGap();
-
-  section(t('tasks'));
-  headCols([t('title'),t('who'),t('status')]);
-  if(!tk.length)add('—',11,[140,140,140]);
-  else tk.forEach(x=>dataRow([x.title, empName(x.who), x.done?t('done'):t('pending')]));
-  addGap();
-
-  section(t('gaps'));
-  headCols([t('agent'),t('amount'),t('note')]);
-  if(!gp.length)add('—',11,[140,140,140]);
-  else gp.forEach(x=>dataRow([empName(x.agent), x.amount+' DA', x.note||'']));
-  add(t('total')+': '+tg+' DA',12,[30,30,30],true);
-  addGap();
-
-  section(t('recl'));
-  headCols([t('subject'),t('nom'),t('type')]);
-  if(!rc.length)add('—',11,[140,140,140]);
-  else rc.forEach(x=>dataRow([x.subject, x.nom, t(x.type)]));
-  addGap();
-
-  section(t('needs'));
-  headCols([t('shop'),t('item'),t('qty')]);
-  if(!nd.length)add('—',11,[140,140,140]);
-  else nd.forEach(x=>dataRow([x.shop||'', x.item||'', x.qty||'']));
-  addGap();
-  add('LIBRAOS',9,[150,150,150]);
-
-  // Paginate
-  const pageLines=[];
-  let cur=[], y=pageH-50;
-  const topY=pageH-50;
-  if(logo)y=pageH-50-Math.max(0,56-0);
-
-  function flush(){if(cur.length)pageLines.push(cur);cur=[];y=pageH-50}
-  lines.forEach(L=>{
-    const need=L.gap?L.gap:(L.rule?12:((L.size||11)+5));
-    if(y-need<50)flush();
-    cur.push({...L,y});
-    y-=need;
-  });
-  flush();
-  if(!pageLines.length)pageLines.push([]);
-
-  // PDF write
-  const parts=[];let pos=0;const offsets=[];
-  function addStr(s){parts.push(s);pos+=s.length}
-  function addBin(b){parts.push(b);pos+=b.length}
-
-  addStr('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
-  const nPages=pageLines.length;
-  const hasLogo=!!logo;
-  // ids: 1=catalog 2=pages  then pairs (page,content)  then font  then image
-  const fontId=3+nPages*2;
-  const imgId=hasLogo?fontId+1:null;
-  const maxId=fontId+(hasLogo?1:0);
-
-  offsets[1]=pos;addStr('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
-  const kids=pageLines.map((_,i)=>(3+i*2)+' 0 R').join(' ');
-  offsets[2]=pos;addStr('2 0 obj\n<< /Type /Pages /Kids ['+kids+'] /Count '+nPages+' >>\nendobj\n');
-
-  pageLines.forEach((pl,pi)=>{
-    const pageId=3+pi*2, contentId=pageId+1;
-    const cmds=[];
-    // logo only on first page
-    if(pi===0&&hasLogo){
-      const maxH=48,maxW=110;
-      const sc=Math.min(maxW/logo.w,maxH/logo.h,1);
-      const lw=logo.w*sc,lh=logo.h*sc;
-      const lx=ml, ly=pageH-45-lh;
-      cmds.push('q');
-      cmds.push(lw.toFixed(1)+' 0 0 '+lh.toFixed(1)+' '+lx.toFixed(1)+' '+ly.toFixed(1)+' cm');
-      cmds.push('/Im0 Do');
-      cmds.push('Q');
-    }
-    pl.forEach(L=>{
-      if(L.gap)return;
-      if(L.rule){
-        const [r,g,b]=L.color;
-        cmds.push((r/255).toFixed(3)+' '+(g/255).toFixed(3)+' '+(b/255).toFixed(3)+' RG');
-        cmds.push((L.w||1)+' w');
-        cmds.push(ml+' '+L.y.toFixed(1)+' m '+(pageW-mr)+' '+L.y.toFixed(1)+' l S');
-        return;
-      }
-      const [r,g,b]=L.color;
-      const x=ml+(L.indent||0);
-      cmds.push('BT');
-      cmds.push((r/255).toFixed(3)+' '+(g/255).toFixed(3)+' '+(b/255).toFixed(3)+' rg');
-      cmds.push('/F1 '+(L.size||11)+' Tf');
-      cmds.push(x.toFixed(1)+' '+L.y.toFixed(1)+' Td');
-      cmds.push('('+pdfEscape(L.text).slice(0,100)+') Tj');
-      cmds.push('ET');
-    });
-    const stream=cmds.join('\n')+'\n';
-    const res=hasLogo
-      ?('/Resources << /Font << /F1 '+fontId+' 0 R >> /XObject << /Im0 '+imgId+' 0 R >> >>')
-      :('/Resources << /Font << /F1 '+fontId+' 0 R >> >>');
-    offsets[pageId]=pos;
-    addStr(pageId+' 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+pageW+' '+pageH+'] /Contents '+contentId+' 0 R '+res+' >>\nendobj\n');
-    offsets[contentId]=pos;
-    addStr(contentId+' 0 obj\n<< /Length '+stream.length+' >>\nstream\n'+stream+'endstream\nendobj\n');
-  });
-
-  offsets[fontId]=pos;
-  addStr(fontId+' 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n');
-  if(hasLogo){
-    offsets[imgId]=pos;
-    addStr(imgId+' 0 obj\n<< /Type /XObject /Subtype /Image /Width '+logo.w+' /Height '+logo.h+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+logo.len+' >>\nstream\n');
-    addBin(logo.raw);
-    addStr('\nendstream\nendobj\n');
-  }
-
-  const xrefPos=pos;
-  addStr('xref\n0 '+(maxId+1)+'\n');
-  addStr('0000000000 65535 f \n');
-  for(let i=1;i<=maxId;i++)addStr(String(offsets[i]||0).padStart(10,'0')+' 00000 n \n');
-  addStr('trailer\n<< /Size '+(maxId+1)+' /Root 1 0 R >>\nstartxref\n'+xrefPos+'\n%%EOF');
-
-  let bin='';
-  for(const p of parts)bin+=p;
-  const bytes=new Uint8Array(bin.length);
-  for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i)&0xff;
-  const chunk=0x8000;let s='';
-  for(let i=0;i<bytes.length;i+=chunk)s+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk));
-  return btoa(s);
-}
-
 async function shareFile(name,data,mime){const C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform()))return false;
-try{const{Filesystem,Share}=C.Plugins;
-const payload=(mime&&mime.includes('pdf'))?(typeof data==='string'?data:btoa(String.fromCharCode.apply(null,new Uint8Array(data)))):btoa(unescape(encodeURIComponent(data)));
-const r=await Filesystem.writeFile({path:name,data:payload,directory:'CACHE'});
-await Share.share({title:name,url:r.uri});}catch(e){alert('Share error: '+(e.message||e))}return true}
+try{const{Filesystem,Share}=C.Plugins;const r=await Filesystem.writeFile({path:name,data:btoa(unescape(encodeURIComponent(data))),directory:'CACHE'});await Share.share({title:name,url:r.uri});}catch(e){alert('Share error: '+(e.message||e))}return true}
 const _exp=exp;exp=async function(){if(!await shareFile('libraos-backup-'+today()+'.json',JSON.stringify(S)))_exp()};
 const _pr=window.print.bind(window);
-window.print=async function(){
-  const r=document.querySelector('.modal .rep')||document.querySelector('.rep');
-  if(!r)return _pr();
-  const d=repDate||today();
-  try{
-    const b64=await buildVisualPdf(d);
-    if(await shareFile('rapport-'+d+'.pdf',b64,'application/pdf'))return;
-  }catch(e){console.warn('PDF export failed',e)}
-  const h=buildReportHtml(d);
-  if(!await shareFile('rapport-'+d+'.html',h)){
-    const w=window.open('','_blank','noopener');
-    if(w){w.document.write(h);w.document.close();w.focus();setTimeout(()=>w.print(),300)}
-    else _pr();
-  }
-};
+window.print=async function(){const r=document.querySelector('.modal .rep')||document.querySelector('.rep');
+if(!r)return _pr();const h='<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>LIBRAOS</title><style>body{font-family:sans-serif;padding:16px;color:#111;font-size:12px}table{width:100%;border-collapse:collapse;font-size:12px}td,th{border-bottom:1px solid #ccc;padding:5px;text-align:start;font-size:12px}h2,h3{font-size:14px}</style></head><body dir="'+document.documentElement.dir+'">'+r.innerHTML+'</body></html>';
+if(!await shareFile('rapport-'+today()+'.html',h))_pr()};
 go('dash');
 </script></body></html>
