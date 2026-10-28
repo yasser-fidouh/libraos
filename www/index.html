@@ -58,7 +58,7 @@ input,select,textarea{background:var(--bg);color:var(--tx);border:1px solid var(
 .empty{color:var(--mut);padding:30px;text-align:center;border:1px dashed var(--line);border-radius:14px}
 h2{font-size:18px;margin:22px 0 10px}
 .rep{background:#fff;color:#111;border-radius:12px;padding:24px}
-.rep h2,.rep h3{color:#0a2a8a;margin:14px 0 6px}.rep table{width:100%;border-collapse:collapse;font-size:14px}.rep td,.rep th{border-bottom:1px solid #ddd;padding:5px;text-align:start}
+.rep h2,.rep h3{margin:14px 0 6px;font-size:14px}.rep,.rep p,.rep td,.rep th,.rep div{font-size:12px}.rep table{width:100%;border-collapse:collapse;font-size:14px}.rep td,.rep th{border-bottom:1px solid #ddd;padding:5px;text-align:start}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ok);color:#022;padding:8px 18px;border-radius:99px;font-weight:600;z-index:99}
 @media(max-width:820px){aside{position:fixed;inset:0 auto 0 0;z-index:40;transform:translateX(-105%);transition:transform .2s}[dir=rtl] aside{inset:0 0 0 auto;transform:translateX(105%)}aside.open{transform:none}#burger{display:inline-block}main{padding:16px}}
 @media print{.modal{position:static;background:none;display:block;padding:0}.modal form{border:0;max-height:none;overflow:visible;padding:0;background:none}body:has(.modal .rep) #app{display:none}aside,header.top,.noprint{display:none!important}body{background:#fff}main{padding:0;max-width:none}.rep{padding:0}}
@@ -68,8 +68,8 @@ h2{font-size:18px;margin:22px 0 10px}
 <script>
 const $=s=>document.querySelector(s),uid=()=>Math.random().toString(36).slice(2,9),today=()=>new Date().toISOString().slice(0,10);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const T={fr:{dash:'Tableau de bord',emp:'Employés',tasks:'Tâches',att:'Pointages',needs:'Besoins des magasins',recl:'Réclamations',gaps:'Manques de caisse',rep:'Rapport de fin de journée',set:'Paramètres',add:'Ajouter',save:'Enregistrer',del:'Supprimer',cancel:'Annuler',nom:'Nom',prenom:'Prénom',tel:'N° téléphone',photo:'Photo de profil',fonction:'Fonction',info:'Infos supplémentaires',title:'Tâche',who:'Employé',when:'Date et heure',done:'Terminée',pending:'En cours',present:'Présent',absent:'Absent',rest:'Repos',late:'Retard',min:'min de retard',shop:'Magasin',item:'Besoin',qty:'Quantité',type:'Type',client:'Client',employee:'Employé',subject:'Objet',details:'Détails',status:'Statut',open:'Ouverte',closed:'Résolue',date:'Date',agent:'Agent',amount:'Montant (+/-)',note:'Note',print:'Imprimer',saveH:'Sauvegarder dans l\'historique',hist:'Historique',none:'Rien pour le moment. Appuyez sur Ajouter.',owner:'Nom du propriétaire',shops:'Magasins (séparés par une virgule)',lang:'Langue',backup:'Exporter la sauvegarde',restore:'Importer une sauvegarde',total:'Total',saved:'Enregistré',sure:'Supprimer cet élément ?',arrive:'Arrivé à',start:'Heure de début de travail (optionnel)',colors:'Couleurs de l\'application',logo:'Logo de l\'entreprise',tagline:'Le système de gestion de votre papeterie & librairie',by:'Conçu par Yasser',preview:'Aperçu',view:'Voir',theme:'Thème',bought:'Acheté',noshop:'Ajoutez un magasin dans Paramètres',ps:'Présents',tp:'Tâches en cours',oc:'Réclamations ouvertes',gt:'Total des manques',npn:'Besoins en attente'},
-ar:{dash:'لوحة التحكم',emp:'الموظفون',tasks:'المهام',att:'الحضور',needs:'احتياجات المحلات',recl:'الشكاوى',gaps:'عجز الصندوق',rep:'تقرير نهاية اليوم',set:'الإعدادات',add:'إضافة',save:'حفظ',del:'حذف',cancel:'إلغاء',nom:'اللقب',prenom:'الاسم',tel:'رقم الهاتف',photo:'صورة الملف الشخصي',fonction:'الوظيفة',info:'معلومات إضافية',title:'المهمة',who:'الموظف',when:'التاريخ والوقت',done:'منجزة',pending:'قيد التنفيذ',present:'حاضر',absent:'غائب',rest:'راحة',late:'متأخر',min:'دقيقة تأخر',shop:'المحل',item:'الحاجة',qty:'الكمية',type:'النوع',client:'زبون',employee:'موظف',subject:'الموضوع',details:'التفاصيل',status:'الحالة',open:'مفتوحة',closed:'تمت المعالجة',date:'التاريخ',agent:'العون',amount:'المبلغ (+/-)',note:'ملاحظة',print:'طباعة',saveH:'حفظ في السجل',hist:'السجل',none:'لا يوجد شيء بعد. اضغط إضافة.',owner:'اسم المالك',shops:'المحلات (مفصولة بفاصلة)',lang:'اللغة',backup:'تصدير نسخة احتياطية',restore:'استيراد نسخة احتياطية',total:'المجموع',saved:'تم الحفظ',sure:'حذف هذا العنصر؟',arrive:'وصل على الساعة',start:'وقت بداية العمل (اختياري)',colors:'ألوان التطبيق',logo:'شعار المؤسسة',tagline:'نظام تسيير مكتبتك وقرطاسيتك',by:'تصميم ياسر',preview:'معاينة',view:'عرض',theme:'المظهر',bought:'تم الشراء',noshop:'أضف محلاً من الإعدادات',ps:'الحاضرون',tp:'مهام قيد التنفيذ',oc:'شكاوى مفتوحة',gt:'مجموع العجز',npn:'احتياجات معلقة'}};
+const T={fr:{dash:'Tableau de bord',emp:'Employés',tasks:'Tâches',att:'Pointages',needs:'Besoins des magasins',recl:'Réclamations',gaps:'Manques de caisse',rep:'Rapport de fin de journée',set:'Paramètres',add:'Ajouter',save:'Enregistrer',del:'Supprimer',cancel:'Annuler',nom:'Nom',prenom:'Prénom',tel:'N° téléphone',photo:'Photo de profil',fonction:'Fonction',info:'Infos supplémentaires',title:'Tâche',who:'Employé',when:'Date et heure',done:'Terminée',pending:'En cours',present:'Présent',absent:'Absent',rest:'Repos',late:'Retard',min:'min de retard',shop:'Magasin',item:'Besoin',qty:'Quantité',type:'Type',client:'Client',employee:'Employé',subject:'Objet',details:'Détails',status:'Statut',open:'Ouverte',closed:'Résolue',date:'Date',agent:'Agent',amount:'Montant (+/-)',note:'Note',print:'Imprimer',saveH:'Sauvegarder dans l\'historique',hist:'Historique',none:'Rien pour le moment. Appuyez sur Ajouter.',owner:'Nom du propriétaire',shops:'Magasins (séparés par une virgule)',lang:'Langue',backup:'Exporter la sauvegarde',restore:'Importer une sauvegarde',total:'Total',saved:'Enregistré',sure:'Supprimer cet élément ?',arrive:'Arrivé à',start:'Heure de début de travail',startMatin:'Entrée matin',startSoir:'Entrée soir',shift:'Poste',matin:'Matin',soir:'Soir',colors:'Couleurs de l\'application',logo:'Logo de l\'entreprise',tagline:'Le système de gestion de votre papeterie & librairie',by:'Conçu par Yasser',preview:'Aperçu',view:'Voir',theme:'Thème',bought:'Acheté',noshop:'Ajoutez un magasin dans Paramètres',ps:'Présents',tp:'Tâches en cours',oc:'Réclamations ouvertes',gt:'Total des manques',npn:'Besoins en attente'},
+ar:{dash:'لوحة التحكم',emp:'الموظفون',tasks:'المهام',att:'الحضور',needs:'احتياجات المحلات',recl:'الشكاوى',gaps:'عجز الصندوق',rep:'تقرير نهاية اليوم',set:'الإعدادات',add:'إضافة',save:'حفظ',del:'حذف',cancel:'إلغاء',nom:'اللقب',prenom:'الاسم',tel:'رقم الهاتف',photo:'صورة الملف الشخصي',fonction:'الوظيفة',info:'معلومات إضافية',title:'المهمة',who:'الموظف',when:'التاريخ والوقت',done:'منجزة',pending:'قيد التنفيذ',present:'حاضر',absent:'غائب',rest:'راحة',late:'متأخر',min:'دقيقة تأخر',shop:'المحل',item:'الحاجة',qty:'الكمية',type:'النوع',client:'زبون',employee:'موظف',subject:'الموضوع',details:'التفاصيل',status:'الحالة',open:'مفتوحة',closed:'تمت المعالجة',date:'التاريخ',agent:'العون',amount:'المبلغ (+/-)',note:'ملاحظة',print:'طباعة',saveH:'حفظ في السجل',hist:'السجل',none:'لا يوجد شيء بعد. اضغط إضافة.',owner:'اسم المالك',shops:'المحلات (مفصولة بفاصلة)',lang:'اللغة',backup:'تصدير نسخة احتياطية',restore:'استيراد نسخة احتياطية',total:'المجموع',saved:'تم الحفظ',sure:'حذف هذا العنصر؟',arrive:'وصل على الساعة',start:'وقت بداية العمل',startMatin:'دخول الصباح',startSoir:'دخول المساء',shift:'الوردية',matin:'صباح',soir:'مساء',colors:'ألوان التطبيق',logo:'شعار المؤسسة',tagline:'نظام تسيير مكتبتك وقرطاسيتك',by:'تصميم ياسر',preview:'معاينة',view:'عرض',theme:'المظهر',bought:'تم الشراء',noshop:'أضف محلاً من الإعدادات',ps:'الحاضرون',tp:'مهام قيد التنفيذ',oc:'شكاوى مفتوحة',gt:'مجموع العجز',npn:'احتياجات معلقة'}};
 let S;try{S=JSON.parse(localStorage.getItem('libraos'))}catch(e){}
 S=Object.assign({lang:'fr',owner:{name:'',phone:'',photo:'',shops:['Magasin 1'],extra:''},emp:[],tasks:[],att:{},needs:[],recl:[],gaps:[],reports:[]},S||{});
 const save=()=>{try{localStorage.setItem('libraos',JSON.stringify(S))}catch(e){toast('Storage full')}};
@@ -80,7 +80,7 @@ const empName=id=>{const e=S.emp.find(x=>x.id==id);return e?e.prenom+' '+e.nom:'
 const av=e=>`<div class="av" style="${e.photo?`background-image:url('${e.photo}')`:''}">${e.photo?'':esc((e.prenom||e.nom||'?')[0])}</div>`;
 const fmtDT=v=>v?new Date(v).toLocaleString(S.lang==='ar'?'ar-DZ':'fr-FR',{dateStyle:'medium',timeStyle:'short'}):'';
 const M={
-emp:{f:[['nom','text'],['prenom','text'],['tel','tel'],['photo','photo'],['fonction','text'],['info','area']],row:e=>`${av(e)}<div class=grow><h3>${esc(e.prenom)} ${esc(e.nom)}</h3><p>${esc(e.fonction)} ${e.tel?'· <span dir=ltr>'+esc(e.tel)+'</span>':''}\n${esc(e.info)}</p></div>`},
+emp:{f:[['nom','text'],['prenom','text'],['tel','tel'],['photo','photo'],['fonction','text'],['shift',['matin','soir']],['info','area']],row:e=>`${av(e)}<div class=grow><h3>${esc(e.prenom)} ${esc(e.nom)}</h3><p>${esc(e.fonction)} ${e.shift?'· '+t(e.shift):''} ${e.tel?'· <span dir=ltr>'+esc(e.tel)+'</span>':''}\n${esc(e.info)}</p></div>`},
 tasks:{f:[['title','text'],['who','emp'],['when','datetime-local'],['done','chk']],row:x=>`<div class=grow><h3>${esc(x.title)}</h3><p>${esc(empName(x.who))} · ${fmtDT(x.when)}</p></div><button class=g onclick="tog('tasks','${x.id}','done')">${x.done?'✔ '+t('done'):'○ '+t('pending')}</button>`},
 needs:{f:[['shop','shop'],['item','text'],['qty','text'],['done','chk']],row:x=>`<div class=grow><h3>${esc(x.item)} ${x.qty?'× '+esc(x.qty):''}</h3><p>${esc(x.shop)}</p></div><button class=g onclick="tog('needs','${x.id}','done')">${x.done?'✔ '+t('bought'):'○ '+t('pending')}</button>`},
 recl:{f:[['type',['client','employee']],['nom','text'],['subject','text'],['details','area'],['status',['open','closed']]],row:x=>`<div class=grow><h3>${esc(x.subject)} <span class=tag>${t(x.type)}</span> <span class="tag ${x.status=='closed'?'ok':'warn'}">${t(x.status)}</span></h3><p>${esc(x.nom)}\n${esc(x.details)}</p></div>`},
@@ -95,7 +95,7 @@ function rm(k,id){ask(t('sure'),()=>{S[k]=S[k].filter(x=>x.id!=id);save();go(vie
 let tmpPhoto='';
 function opts(f){if(Array.isArray(f))return f.map(v=>[v,t(v)]);if(f=='emp')return S.emp.map(e=>[e.id,e.prenom+' '+e.nom]);if(f=='shop')return S.owner.shops.map(s=>[s,s])}
 function openForm(k,id){const x=id?S[k].find(a=>a.id==id):{};tmpPhoto=x.photo||'';
-const def={date:today(),type:'client',status:'open'};
+const def={date:today(),type:'client',status:'open',shift:'matin'};
 const fs=M[k].f.map(([n,ty])=>{const v=x[n]??def[n]??'';let i;
 if(ty=='area')i=`<textarea name=${n} rows=3>${esc(v)}</textarea>`;
 else if(ty=='photo')i=`<input type=file accept="image/*" onchange="pic(this)">${tmpPhoto?`<div class=av style="background-image:url('${tmpPhoto}')"></div>`:''}`;
@@ -114,23 +114,26 @@ function toast(m){const d=document.createElement('div');d.className='toast';d.te
 const ST=['present','absent','rest','late'];
 function setAtt(d,id,s){(S.att[d]??={})[id]??={};S.att[d][id].s=s;S.att[d][id].m=0;S.att[d][id].t=s=='late'?(S.att[d][id].t||''):'';save();go('att')}
 function setTime(d,id,v){S.att[d][id].t=v;save()}
-function lt(a){if(!a||a.s!='late')return '';if(!a.t)return a.m?' ('+a.m+' min)':'';let x=' · '+t('arrive')+' '+a.t;const st=S.owner.start;if(st){const df=(+a.t.slice(0,2)*60+ +a.t.slice(3))-(+st.slice(0,2)*60+ +st.slice(3));if(df>0)x+=' (+'+df+' min)'}return x}
+function lt(a,e){if(!a||a.s!='late')return '';if(!a.t)return a.m?' ('+a.m+' min)':'';let x=' · '+t('arrive')+' '+a.t;const sh=(e&&e.shift)||'matin';const st=sh==='soir'?(S.owner.startSoir||S.owner.start):(S.owner.startMatin||S.owner.start);if(st){const df=(+a.t.slice(0,2)*60+ +a.t.slice(3))-(+st.slice(0,2)*60+ +st.slice(3));if(df>0)x+=' (+'+df+' min)'}return x}
 function attView(){const d=attDate;
 let h=`<div class=row style="margin-bottom:14px"><label>${t('date')}<input type=date value="${d}" onchange="attDate=this.value||today();go('att')"></label></div>`;
 h+=S.emp.length?S.emp.map(e=>{const a=(S.att[d]||{})[e.id]||{};return `<div class=card>${av(e)}<div class=grow><h3>${esc(e.prenom)} ${esc(e.nom)}</h3><p>${esc(e.fonction)}</p></div><div class="seg row">${ST.map(s=>`<button class="${s} ${a.s==s?'on':''}" onclick="setAtt('${d}','${e.id}','${s}')">${t(s)}</button>`).join('')}</div>${a.s=='late'?`<label style="flex-direction:row;align-items:center;gap:8px">${t('arrive')}<input type=time value="${a.t||''}" style="width:130px" onchange="setTime('${d}','${e.id}',this.value)"></label>`:''}</div>`}).join(''):`<div class=empty>${t('none')}</div>`;
 const ds=Object.keys(S.att).sort().reverse();
-h+=`<h2>${t('hist')}</h2>`+ds.map(dt=>`<div class=card><b>${dt}</b><div class=grow>${S.emp.map(e=>{const a=S.att[dt][e.id];return a?`<span class=tag>${esc(e.prenom)}: ${t(a.s)}${lt(a)}</span> `:''}).join('')}</div></div>`).join('');return h}
+h+=`<h2>${t('hist')}</h2>`+ds.map(dt=>`<div class=card><b>${dt}</b><div class=grow>${S.emp.map(e=>{const a=S.att[dt][e.id];return a?`<span class=tag>${esc(e.prenom)}: ${t(a.s)}${lt(a,e)}</span> `:''}).join('')}</div></div>`).join('');return h}
 function dash(){const d=today(),pr=S.emp.filter(e=>['present','late'].includes(((S.att[d]||{})[e.id]||{}).s)).length,g=S.gaps.reduce((n,x)=>n+ +x.amount,0);
 const st=[['emp',S.emp.length,t('emp')],['att',pr+' / '+S.emp.length,t('ps')],['tasks',S.tasks.filter(x=>!x.done).length,t('tp')],['recl',S.recl.filter(x=>x.status!='closed').length,t('oc')],['needs',S.needs.filter(x=>!x.done).length,t('npn')],['gaps',g+' DA',t('gt')]];
 return `<div class=grid>${st.map(([k,v,l])=>`<div class=stat onclick="go('${k}')"><b dir=ltr>${v}</b><span>${l}</span></div>`).join('')}</div><h2>${t('tasks')}</h2>`+(S.tasks.filter(x=>!x.done).slice(0,5).map(x=>`<div class=card>${M.tasks.row(x)}</div>`).join('')||`<div class=empty>${t('none')}</div>`)}
-function build(d){const A=S.att[d]||{},tk=S.tasks.filter(x=>(x.when||'').slice(0,10)==d),gp=S.gaps.filter(x=>x.date==d),rc=S.recl.filter(x=>x.status!='closed'),nd=S.needs.filter(x=>!x.done),tg=gp.reduce((n,x)=>n+ +x.amount,0);
-const tb=(h,rows)=>rows.length?`<table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</table>`:`<p>—</p>`;
-return `<div style="display:flex;align-items:center;gap:16px;border-bottom:2px solid #0a2a8a;padding-bottom:10px;margin-bottom:6px">${S.owner.logo?`<img src="${S.owner.logo}" alt="logo" style="max-height:72px;max-width:180px;object-fit:contain">`:''}<div><h2 style="margin:0">${t('rep')}</h2><div>${esc(S.owner.name)}</div><div>${d}</div></div></div>
-<h3>${t('att')}</h3>${tb([t('who'),t('status')],S.emp.map(e=>[e.prenom+' '+e.nom,A[e.id]?t(A[e.id].s)+lt(A[e.id]):'—']))}
-<h3>${t('tasks')}</h3>${tb([t('title'),t('who'),t('status')],tk.map(x=>[x.title,empName(x.who),x.done?t('done'):t('pending')]))}
-<h3>${t('gaps')}</h3>${tb([t('agent'),t('amount'),t('note')],gp.map(x=>[empName(x.agent),x.amount+' DA',x.note]))}<p><b>${t('total')}: ${tg} DA</b></p>
-<h3>${t('recl')}</h3>${tb([t('subject'),t('nom'),t('type')],rc.map(x=>[x.subject,x.nom,t(x.type)]))}
-<h3>${t('needs')}</h3>${tb([t('shop'),t('item'),t('qty')],nd.map(x=>[x.shop,x.item,x.qty]))}<p style="color:#888;font-size:11px;margin-top:16px">LIBRAOS</p>`}
+function themeColor(){const p=PAL[S.accent]||PAL.blue;return p.a[1]||'#0a2a8a'}
+function statusColor(s){return s==='absent'?'#c62828':s==='late'?'#f9a825':s==='rest'?'#1565c0':'#111'}
+function build(d){const A=S.att[d]||{},tk=S.tasks.filter(x=>(x.when||'').slice(0,10)==d),gp=S.gaps.filter(x=>x.date==d),rc=S.recl.filter(x=>x.status!='closed'),nd=S.needs.filter(x=>!x.done),tg=gp.reduce((n,x)=>n+ +x.amount,0),tc=themeColor();
+const tb=(h,rows)=>rows.length?`<table style="font-size:12px"><tr>${h.map(x=>`<th style="font-size:12px">${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td style="font-size:12px">${c}</td>`).join('')}</tr>`).join('')}</table>`:`<p style="font-size:12px">—</p>`;
+const attRows=S.emp.map(e=>{const st=A[e.id]?A[e.id].s:null;const label=st?t(st)+lt(A[e.id],e):'—';const col=st?statusColor(st):'#111';return [esc(e.prenom+' '+e.nom),`<span style="color:${col};font-weight:${st&&st!=='present'?'600':'400'}">${label}</span>`]});
+return `<div style="display:flex;align-items:center;gap:16px;border-bottom:2px solid ${tc};padding-bottom:10px;margin-bottom:6px">${S.owner.logo?`<img src="${S.owner.logo}" alt="logo" style="max-height:72px;max-width:180px;object-fit:contain">`:''}<div><h2 style="margin:0;font-size:14px;color:${tc}">${t('rep')}</h2><div style="font-size:12px">${esc(S.owner.name)}</div><div style="font-size:12px">${d}</div></div></div>
+<h3 style="font-size:14px;color:${tc}">${t('att')}</h3>${tb([t('who'),t('status')],attRows)}
+<h3 style="font-size:14px;color:${tc}">${t('tasks')}</h3>${tb([t('title'),t('who'),t('status')],tk.map(x=>[esc(x.title),esc(empName(x.who)),x.done?t('done'):t('pending')]))}
+<h3 style="font-size:14px;color:${tc}">${t('gaps')}</h3>${tb([t('agent'),t('amount'),t('note')],gp.map(x=>[esc(empName(x.agent)),x.amount+' DA',esc(x.note||'')]))}<p style="font-size:12px"><b>${t('total')}: ${tg} DA</b></p>
+<h3 style="font-size:14px;color:${tc}">${t('recl')}</h3>${tb([t('subject'),t('nom'),t('type')],rc.map(x=>[esc(x.subject),esc(x.nom),t(x.type)]))}
+<h3 style="font-size:14px;color:${tc}">${t('needs')}</h3>${tb([t('shop'),t('item'),t('qty')],nd.map(x=>[esc(x.shop),esc(x.item),esc(x.qty||'')]))}<p style="color:#888;font-size:11px;margin-top:16px">LIBRAOS</p>`}
 function repView(){return `<div class="row noprint" style="margin-bottom:14px"><label>${t('date')}<input type=date value="${repDate}" onchange="repDate=this.value||today();go('rep')"></label><button class=g onclick="window.print()">🖨 ${t('print')}</button><button class=b onclick="saveRep()">${t('saveH')}</button></div>
 <div class=rep>${build(repDate)}</div><div class=noprint><h2>${t('hist')}</h2>${S.reports.length?[...S.reports].reverse().map(r=>`<div class=card><b>${r.date}</b><div class=grow><p>${new Date(r.saved).toLocaleString()}</p></div><button class=g onclick="viewRep('${r.id}')">${t('view')}</button><button class=d onclick="rm('reports','${r.id}')">✕</button></div>`).join(''):`<div class=empty>${t('none')}</div>`}</div>`}
 const PIX='data:image/gif;base64,R0lGODlhAQABAAAAACw=';
@@ -142,10 +145,11 @@ function viewRep(id){const r=S.reports.find(x=>x.id==id),m=document.createElemen
 function setView(){const o=S.owner;tmpPhoto=o.photo;return `<form class=card style="display:block;max-width:520px" onsubmit="saveSet(event)"><div class=row>${av({photo:o.photo,prenom:o.name})}<input type=file accept="image/*" onchange="pic(this,p=>{S.owner.photo=p;save();const a=document.querySelector('.card .av');if(a)a.style.backgroundImage='url('+p+')'})" style="flex:1"></div>
 <div class=row style="margin:10px 0">${o.logo?`<img src="${o.logo}" alt="logo" style="height:48px;max-width:140px;object-fit:contain;background:#fff;border-radius:8px;padding:4px">`:''}<label style="flex:1">${t('logo')}<input type=file accept="image/*" onchange="picLogo(this)"></label>${o.logo?`<button type=button class=d onclick="rmLogo()" aria-label="x">✕</button>`:''}</div><label>${t('owner')}<input name=name value="${esc(o.name)}"></label><label>${t('tel')}<input name=phone dir=ltr value="${esc(o.phone)}"></label>
 <label>${t('shops')}<input name=shops value="${esc(o.shops.join(', '))}"></label><label>${t('info')}<textarea name=extra rows=3>${esc(o.extra)}</textarea></label>
-<label>${t('start')}<input name=start type=time value="${esc(o.start||'')}"></label><div style="font-size:13px;color:var(--mut)">${t('colors')}</div><div class=row id=sw style="margin:6px 0 10px">${Object.entries(PAL).map(([k,p])=>`<button type=button title="${p.n[S.lang]}" aria-label="${p.n[S.lang]}" data-k="${k}" onclick="setAccent('${k}')" style="width:38px;height:38px;border-radius:50%;cursor:pointer;border:3px solid ${(S.accent||'blue')==k?'var(--tx)':'transparent'};background:linear-gradient(135deg,${p.a[1]},${p.a[0]})"></button>`).join('')}</div><label>${t('lang')}<select name=lang><option value=fr ${S.lang=='fr'?'selected':''}>Français</option><option value=ar ${S.lang=='ar'?'selected':''}>العربية</option></select></label>
+<label>${t('startMatin')}<input name=startMatin type=time value="${esc(o.startMatin||o.start||'')}"></label>
+<label>${t('startSoir')}<input name=startSoir type=time value="${esc(o.startSoir||'')}"></label><div style="font-size:13px;color:var(--mut)">${t('colors')}</div><div class=row id=sw style="margin:6px 0 10px">${Object.entries(PAL).map(([k,p])=>`<button type=button title="${p.n[S.lang]}" aria-label="${p.n[S.lang]}" data-k="${k}" onclick="setAccent('${k}')" style="width:38px;height:38px;border-radius:50%;cursor:pointer;border:3px solid ${(S.accent||'blue')==k?'var(--tx)':'transparent'};background:linear-gradient(135deg,${p.a[1]},${p.a[0]})"></button>`).join('')}</div><label>${t('lang')}<select name=lang><option value=fr ${S.lang=='fr'?'selected':''}>Français</option><option value=ar ${S.lang=='ar'?'selected':''}>العربية</option></select></label>
 <label>${t('theme')}<select name=theme><option value="">Auto</option><option value=dark ${S.theme=='dark'?'selected':''}>Dark</option><option value=light ${S.theme=='light'?'selected':''}>Light</option></select></label>
 <div class=row style="margin-top:12px"><button class=b>${t('save')}</button><button type=button class=g onclick="exp()">${t('backup')}</button><label class=g style="flex-direction:row;cursor:pointer">${t('restore')}<input type=file accept=.json hidden onchange="imp(this)"></label></div></form>`}
-function saveSet(e){e.preventDefault();const q=n=>e.target.querySelector('[name="'+n+'"]').value,o=S.owner;o.name=q('name');o.phone=q('phone');o.shops=q('shops').split(',').map(x=>x.trim()).filter(Boolean);o.extra=q('extra');o.start=q('start');S.lang=q('lang');S.theme=q('theme');save();go('set');toast(t('saved'))}
+function saveSet(e){e.preventDefault();const q=n=>e.target.querySelector('[name="'+n+'"]').value,o=S.owner;o.name=q('name');o.phone=q('phone');o.shops=q('shops').split(',').map(x=>x.trim()).filter(Boolean);o.extra=q('extra');o.startMatin=q('startMatin');o.startSoir=q('startSoir');o.start=o.startMatin;S.lang=q('lang');S.theme=q('theme');save();go('set');toast(t('saved'))}
 function exp(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='libraos-backup-'+today()+'.json';a.click()}
 function imp(i){const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d||typeof d!=='object'||Array.isArray(d))throw 0;S=Object.assign({lang:'fr',owner:{name:'',phone:'',photo:'',shops:['Magasin 1'],extra:''},emp:[],tasks:[],att:{},needs:[],recl:[],gaps:[],reports:[]},d);S.owner=Object.assign({name:'',phone:'',photo:'',shops:['Magasin 1'],extra:''},S.owner);if(!T[S.lang])S.lang='fr';save();go('set');toast(t('saved'))}catch(e){toast('Invalid file')}};r.readAsText(i.files[0])}
 const PAL={blue:{n:{fr:'Bleu',ar:'أزرق'},a:['#00c2ff','#0a5cff'],on:'#fff'},
@@ -168,11 +172,68 @@ $('#mn').innerHTML=`<header class=top><button id=burger class=g onclick="$('#sb'
 
 /* ---- Android (Capacitor) : share files instead of download / print ---- */
 async function shareFile(name,data,mime){const C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform()))return false;
-try{const{Filesystem,Share}=C.Plugins;const r=await Filesystem.writeFile({path:name,data:btoa(unescape(encodeURIComponent(data))),directory:'CACHE'});await Share.share({title:name,url:r.uri});}catch(e){alert('Share error: '+(e.message||e))}return true}
+try{const{Filesystem,Share}=C.Plugins;const isB64=typeof data==='string'&&!data.startsWith('%PDF')&&mime&&mime.includes('pdf');
+const payload=mime&&mime.includes('pdf')?(typeof data==='string'?data:btoa(String.fromCharCode.apply(null,new Uint8Array(data)))):btoa(unescape(encodeURIComponent(data)));
+const r=await Filesystem.writeFile({path:name,data:payload,directory:'CACHE'});await Share.share({title:name,url:r.uri});}catch(e){alert('Share error: '+(e.message||e))}return true}
+function pdfEscape(s){const map={'à':'a','â':'a','ä':'a','é':'e','è':'e','ê':'e','ë':'e','î':'i','ï':'i','ô':'o','ö':'o','ù':'u','û':'u','ü':'u','ç':'c','À':'A','Â':'A','Ä':'A','É':'E','È':'E','Ê':'E','Ë':'E','Î':'I','Ï':'I','Ô':'O','Ö':'O','Ù':'U','Û':'U','Ü':'U','Ç':'C','’':"'",'–':'-','—':'-'};
+return String(s||'').replace(/[àâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ’–—]/g,c=>map[c]||c).replace(/[^\x20-\x7E]/g,'?').replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)')}
+function buildPdf(d){
+const A=S.att[d]||{},tk=S.tasks.filter(x=>(x.when||'').slice(0,10)==d),gp=S.gaps.filter(x=>x.date==d),rc=S.recl.filter(x=>x.status!='closed'),nd=S.needs.filter(x=>!x.done),tg=gp.reduce((n,x)=>n+ +x.amount,0);
+const lines=[];
+const add=(txt,size)=>{lines.push({t:String(txt||''),s:size||12})};
+add(t('rep'),14);add(S.owner.name||'',12);add(d,12);add('',12);
+add(t('att'),14);
+S.emp.forEach(e=>{const a=A[e.id];const st=a?t(a.s)+lt(a,e):'—';add((e.prenom+' '+e.nom)+' : '+st,12)});
+add('',12);add(t('tasks'),14);
+if(!tk.length)add('—',12);else tk.forEach(x=>add(x.title+' · '+empName(x.who)+' · '+(x.done?t('done'):t('pending')),12));
+add('',12);add(t('gaps'),14);
+if(!gp.length)add('—',12);else gp.forEach(x=>add(empName(x.agent)+' · '+x.amount+' DA · '+(x.note||''),12));
+add(t('total')+': '+tg+' DA',12);
+add('',12);add(t('recl'),14);
+if(!rc.length)add('—',12);else rc.forEach(x=>add(x.subject+' · '+x.nom+' · '+t(x.type),12));
+add('',12);add(t('needs'),14);
+if(!nd.length)add('—',12);else nd.forEach(x=>add((x.shop||'')+' · '+(x.item||'')+' · '+(x.qty||''),12));
+add('',12);add('LIBRAOS',11);
+// Build simple PDF (Helvetica, Latin-1)
+const pageW=595,pageH=842,margin=40,lineH=16;
+let y=pageH-margin;
+const content=[];
+const writeLine=(text,size)=>{
+  if(y<margin+20){content.push('ET');/* multi-page skip for simplicity */y=pageH-margin}
+  const yy=y;
+  content.push('BT /F1 '+size+' Tf '+margin+' '+yy+' Td ('+pdfEscape(text).slice(0,90)+') Tj ET');
+  y-=(size===14?20:lineH);
+};
+lines.forEach(L=>writeLine(L.t,L.s));
+const stream=content.join('\n')+'\n';
+const objs=[];
+objs.push('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+objs.push('2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n');
+objs.push('3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+pageW+' '+pageH+'] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n');
+objs.push('4 0 obj\n<< /Length '+stream.length+' >>\nstream\n'+stream+'\nendstream\nendobj\n');
+objs.push('5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n');
+let pdf='%PDF-1.4\n';
+const offsets=[0];
+objs.forEach(o=>{offsets.push(pdf.length);pdf+=o});
+const xrefStart=pdf.length;
+pdf+='xref\n0 '+(objs.length+1)+'\n';
+pdf+='0000000000 65535 f \n';
+for(let i=1;i<=objs.length;i++)pdf+=String(offsets[i]).padStart(10,'0')+' 00000 n \n';
+pdf+='trailer\n<< /Size '+(objs.length+1)+' /Root 1 0 R >>\nstartxref\n'+xrefStart+'\n%%EOF';
+// Return base64
+return btoa(unescape(encodeURIComponent(pdf).replace(/%([0-9A-F]{2})/g,(m,p)=>String.fromCharCode(parseInt(p,16)))));
+}
 const _exp=exp;exp=async function(){if(!await shareFile('libraos-backup-'+today()+'.json',JSON.stringify(S)))_exp()};
 const _pr=window.print.bind(window);
 window.print=async function(){const r=document.querySelector('.modal .rep')||document.querySelector('.rep');
-if(!r)return _pr();const h='<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>LIBRAOS</title><style>body{font-family:sans-serif;padding:16px;color:#111}table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #ccc;padding:5px;text-align:start}h2,h3{color:#0a2a8a}</style></head><body dir="'+document.documentElement.dir+'">'+r.innerHTML+'</body></html>';
-if(!await shareFile('rapport-'+today()+'.html',h))_pr()};
+if(!r)return _pr();
+const d=repDate||today();
+try{
+  const b64=buildPdf(d);
+  if(await shareFile('rapport-'+d+'.pdf',b64,'application/pdf'))return;
+}catch(e){console.warn(e)}
+// fallback HTML
+const h='<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>LIBRAOS</title><style>body{font-family:sans-serif;padding:16px;color:#111}table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #ccc;padding:5px;text-align:start}h2,h3{font-size:14px}body,td,th,p,div{font-size:12px}</style></head><body dir="'+document.documentElement.dir+'">'+r.innerHTML+'</body></html>';
+if(!await shareFile('rapport-'+d+'.html',h))_pr()};
 go('dash');
 </script></body></html>
