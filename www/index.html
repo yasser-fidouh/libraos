@@ -171,69 +171,230 @@ const body=v=='dash'?dash():v=='att'?attView():v=='rep'?repView():v=='set'?setVi
 $('#mn').innerHTML=`<header class=top><button id=burger class=g onclick="$('#sb').classList.toggle('open')">☰</button><h1>${t(v)}</h1>${S.owner.name?`<span class=tag>${esc(S.owner.name)}</span>`:''}</header>${body}`;scrollTo(0,0)}
 
 /* ---- Android (Capacitor) : share files instead of download / print ---- */
-async function shareFile(name,data,mime){const C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform()))return false;
-try{const{Filesystem,Share}=C.Plugins;const isB64=typeof data==='string'&&!data.startsWith('%PDF')&&mime&&mime.includes('pdf');
-const payload=mime&&mime.includes('pdf')?(typeof data==='string'?data:btoa(String.fromCharCode.apply(null,new Uint8Array(data)))):btoa(unescape(encodeURIComponent(data)));
-const r=await Filesystem.writeFile({path:name,data:payload,directory:'CACHE'});await Share.share({title:name,url:r.uri});}catch(e){alert('Share error: '+(e.message||e))}return true}
+function hexToRgb(hex){const h=(hex||'#0a2a8a').replace('#','');const full=h.length===3?h.split('').map(c=>c+c).join(''):h;const n=parseInt(full,16);return[(n>>16)&255,(n>>8)&255,n&255]}
 function pdfEscape(s){const map={'à':'a','â':'a','ä':'a','é':'e','è':'e','ê':'e','ë':'e','î':'i','ï':'i','ô':'o','ö':'o','ù':'u','û':'u','ü':'u','ç':'c','À':'A','Â':'A','Ä':'A','É':'E','È':'E','Ê':'E','Ë':'E','Î':'I','Ï':'I','Ô':'O','Ö':'O','Ù':'U','Û':'U','Ü':'U','Ç':'C','’':"'",'–':'-','—':'-'};
 return String(s||'').replace(/[àâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ’–—]/g,c=>map[c]||c).replace(/[^\x20-\x7E]/g,'?').replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)')}
-function buildPdf(d){
-const A=S.att[d]||{},tk=S.tasks.filter(x=>(x.when||'').slice(0,10)==d),gp=S.gaps.filter(x=>x.date==d),rc=S.recl.filter(x=>x.status!='closed'),nd=S.needs.filter(x=>!x.done),tg=gp.reduce((n,x)=>n+ +x.amount,0);
-const lines=[];
-const add=(txt,size)=>{lines.push({t:String(txt||''),s:size||12})};
-add(t('rep'),14);add(S.owner.name||'',12);add(d,12);add('',12);
-add(t('att'),14);
-S.emp.forEach(e=>{const a=A[e.id];const st=a?t(a.s)+lt(a,e):'—';add((e.prenom+' '+e.nom)+' : '+st,12)});
-add('',12);add(t('tasks'),14);
-if(!tk.length)add('—',12);else tk.forEach(x=>add(x.title+' · '+empName(x.who)+' · '+(x.done?t('done'):t('pending')),12));
-add('',12);add(t('gaps'),14);
-if(!gp.length)add('—',12);else gp.forEach(x=>add(empName(x.agent)+' · '+x.amount+' DA · '+(x.note||''),12));
-add(t('total')+': '+tg+' DA',12);
-add('',12);add(t('recl'),14);
-if(!rc.length)add('—',12);else rc.forEach(x=>add(x.subject+' · '+x.nom+' · '+t(x.type),12));
-add('',12);add(t('needs'),14);
-if(!nd.length)add('—',12);else nd.forEach(x=>add((x.shop||'')+' · '+(x.item||'')+' · '+(x.qty||''),12));
-add('',12);add('LIBRAOS',11);
-// Build simple PDF (Helvetica, Latin-1)
-const pageW=595,pageH=842,margin=40,lineH=16;
-let y=pageH-margin;
-const content=[];
-const writeLine=(text,size)=>{
-  if(y<margin+20){content.push('ET');/* multi-page skip for simplicity */y=pageH-margin}
-  const yy=y;
-  content.push('BT /F1 '+size+' Tf '+margin+' '+yy+' Td ('+pdfEscape(text).slice(0,90)+') Tj ET');
-  y-=(size===14?20:lineH);
-};
-lines.forEach(L=>writeLine(L.t,L.s));
-const stream=content.join('\n')+'\n';
-const objs=[];
-objs.push('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
-objs.push('2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n');
-objs.push('3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+pageW+' '+pageH+'] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n');
-objs.push('4 0 obj\n<< /Length '+stream.length+' >>\nstream\n'+stream+'\nendstream\nendobj\n');
-objs.push('5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n');
-let pdf='%PDF-1.4\n';
-const offsets=[0];
-objs.forEach(o=>{offsets.push(pdf.length);pdf+=o});
-const xrefStart=pdf.length;
-pdf+='xref\n0 '+(objs.length+1)+'\n';
-pdf+='0000000000 65535 f \n';
-for(let i=1;i<=objs.length;i++)pdf+=String(offsets[i]).padStart(10,'0')+' 00000 n \n';
-pdf+='trailer\n<< /Size '+(objs.length+1)+' /Root 1 0 R >>\nstartxref\n'+xrefStart+'\n%%EOF';
-// Return base64
-return btoa(unescape(encodeURIComponent(pdf).replace(/%([0-9A-F]{2})/g,(m,p)=>String.fromCharCode(parseInt(p,16)))));
+function buildReportHtml(d){
+  const body=build(d),tc=themeColor();
+  return `<!DOCTYPE html><html><head><meta charset=utf-8><title>LIBRAOS — ${d}</title>
+<style>
+*{box-sizing:border-box}body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:28px;color:#111;background:#fff;margin:0;max-width:800px}
+h2{margin:0;font-size:14px;color:${tc};font-weight:700}h3{font-size:14px;color:${tc};margin:16px 0 8px;font-weight:700}
+p,div,td,th{font-size:12px}table{width:100%;border-collapse:collapse}
+th{text-align:start;border-bottom:2px solid #ddd;padding:6px 5px;font-weight:600}
+td{border-bottom:1px solid #e8e8e8;padding:6px 5px}
+</style></head><body dir="${document.documentElement.dir}">${body}</body></html>`}
+
+function parseDataUrlImage(dataUrl){
+  if(!dataUrl||typeof dataUrl!=='string'||!dataUrl.startsWith('data:image/'))return null;
+  return new Promise(resolve=>{
+    const img=new Image();
+    img.onload=()=>{
+      try{
+        const max=400;
+        let w=img.width,h=img.height;
+        const sc=Math.min(1,max/Math.max(w,h));
+        w=Math.round(w*sc);h=Math.round(h*sc);
+        const c=document.createElement('canvas');
+        c.width=w;c.height=h;
+        const ctx=c.getContext('2d');
+        ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
+        ctx.drawImage(img,0,0,w,h);
+        const dataUrlJ=c.toDataURL('image/jpeg',0.9);
+        const b64=dataUrlJ.split(',')[1];
+        const raw=atob(b64);
+        resolve({raw,w,h,len:raw.length});
+      }catch(e){resolve(null)}
+    };
+    img.onerror=()=>resolve(null);
+    img.src=dataUrl;
+  });
 }
+
+async function buildVisualPdf(d){
+  const A=S.att[d]||{},tk=S.tasks.filter(x=>(x.when||'').slice(0,10)==d),gp=S.gaps.filter(x=>x.date==d),rc=S.recl.filter(x=>x.status!='closed'),nd=S.needs.filter(x=>!x.done),tg=gp.reduce((n,x)=>n+ +x.amount,0);
+  const tc=themeColor(),[tr,tg2,tb]=hexToRgb(tc);
+  const pageW=595,pageH=842,ml=40,mr=40;
+  const logo=await parseDataUrlImage(S.owner.logo||'');
+
+  // Collect text lines with style: {text, size, color:[r,g,b], bold, indent}
+  const lines=[];
+  function add(text,size,color,bold,indent){lines.push({text:String(text||''),size:size||11,color:color||[30,30,30],bold:!!bold,indent:indent||0})}
+  function addGap(){lines.push({gap:10})}
+  function addRule(color,w){lines.push({rule:true,color:color||[tr,tg2,tb],w:w||1.5})}
+
+  // Header lines (logo drawn separately)
+  add(t('rep'),14,[tr,tg2,tb],true, logo?130:0);
+  add(S.owner.name||'',11,[50,50,50],false, logo?130:0);
+  add(d,11,[50,50,50],false, logo?130:0);
+  addGap();
+  addRule([tr,tg2,tb],2);
+  addGap();
+
+  function section(title){add(title,13,[tr,tg2,tb],true);lines.push({rule:true,color:[tr,tg2,tb],w:0.8})}
+  function headCols(cols){add(cols.join('   |   '),10,[90,90,90],true)}
+  function dataRow(parts,color){add(parts.join('   ·   '),11,color||[30,30,30],false)}
+
+  section(t('att'));
+  headCols([t('who'),t('status')]);
+  if(!S.emp.length)add('—',11,[140,140,140]);
+  else S.emp.forEach(e=>{
+    const a=A[e.id];const st=a?a.s:null;
+    const label=st?t(st)+lt(a,e):'—';
+    let col=[30,30,30];
+    if(st==='absent')col=[198,40,40];
+    else if(st==='late')col=[200,140,0];
+    else if(st==='rest')col=[21,101,192];
+    dataRow([e.prenom+' '+e.nom, label], col);
+  });
+  addGap();
+
+  section(t('tasks'));
+  headCols([t('title'),t('who'),t('status')]);
+  if(!tk.length)add('—',11,[140,140,140]);
+  else tk.forEach(x=>dataRow([x.title, empName(x.who), x.done?t('done'):t('pending')]));
+  addGap();
+
+  section(t('gaps'));
+  headCols([t('agent'),t('amount'),t('note')]);
+  if(!gp.length)add('—',11,[140,140,140]);
+  else gp.forEach(x=>dataRow([empName(x.agent), x.amount+' DA', x.note||'']));
+  add(t('total')+': '+tg+' DA',12,[30,30,30],true);
+  addGap();
+
+  section(t('recl'));
+  headCols([t('subject'),t('nom'),t('type')]);
+  if(!rc.length)add('—',11,[140,140,140]);
+  else rc.forEach(x=>dataRow([x.subject, x.nom, t(x.type)]));
+  addGap();
+
+  section(t('needs'));
+  headCols([t('shop'),t('item'),t('qty')]);
+  if(!nd.length)add('—',11,[140,140,140]);
+  else nd.forEach(x=>dataRow([x.shop||'', x.item||'', x.qty||'']));
+  addGap();
+  add('LIBRAOS',9,[150,150,150]);
+
+  // Paginate
+  const pageLines=[];
+  let cur=[], y=pageH-50;
+  const topY=pageH-50;
+  if(logo)y=pageH-50-Math.max(0,56-0);
+
+  function flush(){if(cur.length)pageLines.push(cur);cur=[];y=pageH-50}
+  lines.forEach(L=>{
+    const need=L.gap?L.gap:(L.rule?12:((L.size||11)+5));
+    if(y-need<50)flush();
+    cur.push({...L,y});
+    y-=need;
+  });
+  flush();
+  if(!pageLines.length)pageLines.push([]);
+
+  // PDF write
+  const parts=[];let pos=0;const offsets=[];
+  function addStr(s){parts.push(s);pos+=s.length}
+  function addBin(b){parts.push(b);pos+=b.length}
+
+  addStr('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+  const nPages=pageLines.length;
+  const hasLogo=!!logo;
+  // ids: 1=catalog 2=pages  then pairs (page,content)  then font  then image
+  const fontId=3+nPages*2;
+  const imgId=hasLogo?fontId+1:null;
+  const maxId=fontId+(hasLogo?1:0);
+
+  offsets[1]=pos;addStr('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+  const kids=pageLines.map((_,i)=>(3+i*2)+' 0 R').join(' ');
+  offsets[2]=pos;addStr('2 0 obj\n<< /Type /Pages /Kids ['+kids+'] /Count '+nPages+' >>\nendobj\n');
+
+  pageLines.forEach((pl,pi)=>{
+    const pageId=3+pi*2, contentId=pageId+1;
+    const cmds=[];
+    // logo only on first page
+    if(pi===0&&hasLogo){
+      const maxH=48,maxW=110;
+      const sc=Math.min(maxW/logo.w,maxH/logo.h,1);
+      const lw=logo.w*sc,lh=logo.h*sc;
+      const lx=ml, ly=pageH-45-lh;
+      cmds.push('q');
+      cmds.push(lw.toFixed(1)+' 0 0 '+lh.toFixed(1)+' '+lx.toFixed(1)+' '+ly.toFixed(1)+' cm');
+      cmds.push('/Im0 Do');
+      cmds.push('Q');
+    }
+    pl.forEach(L=>{
+      if(L.gap)return;
+      if(L.rule){
+        const [r,g,b]=L.color;
+        cmds.push((r/255).toFixed(3)+' '+(g/255).toFixed(3)+' '+(b/255).toFixed(3)+' RG');
+        cmds.push((L.w||1)+' w');
+        cmds.push(ml+' '+L.y.toFixed(1)+' m '+(pageW-mr)+' '+L.y.toFixed(1)+' l S');
+        return;
+      }
+      const [r,g,b]=L.color;
+      const x=ml+(L.indent||0);
+      cmds.push('BT');
+      cmds.push((r/255).toFixed(3)+' '+(g/255).toFixed(3)+' '+(b/255).toFixed(3)+' rg');
+      cmds.push('/F1 '+(L.size||11)+' Tf');
+      cmds.push(x.toFixed(1)+' '+L.y.toFixed(1)+' Td');
+      cmds.push('('+pdfEscape(L.text).slice(0,100)+') Tj');
+      cmds.push('ET');
+    });
+    const stream=cmds.join('\n')+'\n';
+    const res=hasLogo
+      ?('/Resources << /Font << /F1 '+fontId+' 0 R >> /XObject << /Im0 '+imgId+' 0 R >> >>')
+      :('/Resources << /Font << /F1 '+fontId+' 0 R >> >>');
+    offsets[pageId]=pos;
+    addStr(pageId+' 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+pageW+' '+pageH+'] /Contents '+contentId+' 0 R '+res+' >>\nendobj\n');
+    offsets[contentId]=pos;
+    addStr(contentId+' 0 obj\n<< /Length '+stream.length+' >>\nstream\n'+stream+'endstream\nendobj\n');
+  });
+
+  offsets[fontId]=pos;
+  addStr(fontId+' 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n');
+  if(hasLogo){
+    offsets[imgId]=pos;
+    addStr(imgId+' 0 obj\n<< /Type /XObject /Subtype /Image /Width '+logo.w+' /Height '+logo.h+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+logo.len+' >>\nstream\n');
+    addBin(logo.raw);
+    addStr('\nendstream\nendobj\n');
+  }
+
+  const xrefPos=pos;
+  addStr('xref\n0 '+(maxId+1)+'\n');
+  addStr('0000000000 65535 f \n');
+  for(let i=1;i<=maxId;i++)addStr(String(offsets[i]||0).padStart(10,'0')+' 00000 n \n');
+  addStr('trailer\n<< /Size '+(maxId+1)+' /Root 1 0 R >>\nstartxref\n'+xrefPos+'\n%%EOF');
+
+  let bin='';
+  for(const p of parts)bin+=p;
+  const bytes=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i)&0xff;
+  const chunk=0x8000;let s='';
+  for(let i=0;i<bytes.length;i+=chunk)s+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk));
+  return btoa(s);
+}
+
+async function shareFile(name,data,mime){const C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform()))return false;
+try{const{Filesystem,Share}=C.Plugins;
+const payload=(mime&&mime.includes('pdf'))?(typeof data==='string'?data:btoa(String.fromCharCode.apply(null,new Uint8Array(data)))):btoa(unescape(encodeURIComponent(data)));
+const r=await Filesystem.writeFile({path:name,data:payload,directory:'CACHE'});
+await Share.share({title:name,url:r.uri});}catch(e){alert('Share error: '+(e.message||e))}return true}
 const _exp=exp;exp=async function(){if(!await shareFile('libraos-backup-'+today()+'.json',JSON.stringify(S)))_exp()};
 const _pr=window.print.bind(window);
-window.print=async function(){const r=document.querySelector('.modal .rep')||document.querySelector('.rep');
-if(!r)return _pr();
-const d=repDate||today();
-try{
-  const b64=buildPdf(d);
-  if(await shareFile('rapport-'+d+'.pdf',b64,'application/pdf'))return;
-}catch(e){console.warn(e)}
-// fallback HTML
-const h='<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>LIBRAOS</title><style>body{font-family:sans-serif;padding:16px;color:#111}table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #ccc;padding:5px;text-align:start}h2,h3{font-size:14px}body,td,th,p,div{font-size:12px}</style></head><body dir="'+document.documentElement.dir+'">'+r.innerHTML+'</body></html>';
-if(!await shareFile('rapport-'+d+'.html',h))_pr()};
+window.print=async function(){
+  const r=document.querySelector('.modal .rep')||document.querySelector('.rep');
+  if(!r)return _pr();
+  const d=repDate||today();
+  try{
+    const b64=await buildVisualPdf(d);
+    if(await shareFile('rapport-'+d+'.pdf',b64,'application/pdf'))return;
+  }catch(e){console.warn('PDF export failed',e)}
+  const h=buildReportHtml(d);
+  if(!await shareFile('rapport-'+d+'.html',h)){
+    const w=window.open('','_blank','noopener');
+    if(w){w.document.write(h);w.document.close();w.focus();setTimeout(()=>w.print(),300)}
+    else _pr();
+  }
+};
 go('dash');
 </script></body></html>
